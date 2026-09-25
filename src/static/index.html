@@ -1,0 +1,1852 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dubalike — Voice Dubbing & Dialogue Studio for Indian Cinema</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #090d16;
+      --bg-card: rgba(18, 24, 38, 0.75);
+      --bg-card-hover: rgba(26, 34, 54, 0.85);
+      --border-color: rgba(255, 255, 255, 0.08);
+      --border-glow: rgba(245, 158, 11, 0.3);
+      --accent-gold: #f59e0b;
+      --accent-gold-glow: rgba(245, 158, 11, 0.4);
+      --accent-cyan: #06b6d4;
+      --accent-purple: #8b5cf6;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+      --radius-lg: 18px;
+      --radius-md: 12px;
+      --radius-sm: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      background-image: 
+        radial-gradient(circle at 15% 15%, rgba(245, 158, 11, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 85% 75%, rgba(6, 182, 212, 0.08) 0%, transparent 45%);
+      color: var(--text-main);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      padding: 24px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border-color);
+      backdrop-filter: blur(12px);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(9, 13, 22, 0.85);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .brand-logo {
+      width: 44px;
+      height: 44px;
+      background: linear-gradient(135deg, #f59e0b, #ef4444);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      box-shadow: 0 4px 18px var(--accent-gold-glow);
+    }
+
+    .brand-text h1 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      background: linear-gradient(135deg, #ffffff 30%, #fcd34d 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .brand-text p {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .lang-pills {
+      display: flex;
+      gap: 8px;
+    }
+
+    .pill {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-color);
+      color: var(--accent-cyan);
+    }
+
+    .pill.telugu { color: #f59e0b; border-color: rgba(245, 158, 11, 0.3); }
+    .pill.hindi { color: #ef4444; border-color: rgba(239, 68, 68, 0.3); }
+
+    main {
+      flex: 1;
+      max-width: 1300px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 32px 24px;
+      display: grid;
+      grid-template-columns: 440px 1fr;
+      gap: 32px;
+    }
+
+    @media (max-width: 1000px) {
+      main {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Cards */
+    .card {
+      background: var(--bg-card);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+      position: relative;
+    }
+
+    .card-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* Form Controls */
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    input[type="text"], select, textarea {
+      width: 100%;
+      background: rgba(10, 14, 24, 0.8);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      padding: 12px 14px;
+      color: #fff;
+      font-size: 14px;
+      font-family: inherit;
+      transition: all 0.2s ease;
+    }
+
+    input[type="text"]:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--accent-gold);
+      box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.15);
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    /* Quick Presets */
+    .presets-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-dim);
+      margin-bottom: 8px;
+    }
+
+    .presets-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 18px;
+    }
+
+    .preset-btn {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-color);
+      color: var(--text-muted);
+      font-size: 12px;
+      padding: 6px 12px;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .preset-btn:hover {
+      background: rgba(245, 158, 11, 0.15);
+      border-color: var(--accent-gold);
+      color: #fff;
+    }
+
+    /* Action Button */
+    .btn-primary {
+      width: 100%;
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      color: #000;
+      border: none;
+      padding: 14px 20px;
+      font-size: 15px;
+      font-weight: 700;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: transform 0.15s, box-shadow 0.2s;
+      box-shadow: 0 4px 16px var(--accent-gold-glow);
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px var(--accent-gold-glow);
+    }
+
+    .btn-primary:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* Processing status box */
+    .status-box {
+      margin-top: 18px;
+      padding: 14px;
+      border-radius: var(--radius-md);
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid var(--border-color);
+      font-size: 13px;
+      display: none;
+    }
+
+    .spinner {
+      width: 18px;
+      height: 18px;
+      border: 2px solid rgba(255, 255, 255, 0.15);
+      border-top-color: var(--accent-gold);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 8px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Studio / Video Player Area */
+    .studio-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .video-viewport {
+      position: relative;
+      background: #000;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      aspect-ratio: 16 / 9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+      border: 1px solid var(--border-color);
+    }
+
+    .video-viewport video {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .empty-state {
+      text-align: center;
+      color: var(--text-dim);
+      padding: 40px;
+    }
+
+    .empty-state-icon {
+      font-size: 48px;
+      margin-bottom: 12px;
+      opacity: 0.7;
+    }
+
+    /* Teleprompter Subtitles Overlay */
+    .teleprompter-overlay {
+      position: absolute;
+      bottom: 24px;
+      left: 20px;
+      right: 20px;
+      text-align: center;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(8px);
+      padding: 12px 18px;
+      border-radius: var(--radius-sm);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      font-size: 18px;
+      font-weight: 700;
+      color: #fff;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+      pointer-events: none;
+      display: none;
+    }
+
+    .teleprompter-overlay.active {
+      display: block;
+      animation: pulseSub 2s infinite ease-in-out;
+    }
+
+    @keyframes pulseSub {
+      0%, 100% { border-color: rgba(245, 158, 11, 0.4); }
+      50% { border-color: rgba(6, 182, 212, 0.7); }
+    }
+
+    /* Audio Stem Mixer Controls */
+    .mixer-bar {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      background: rgba(14, 20, 32, 0.85);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 18px;
+    }
+
+    .stem-mode-tabs {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .stem-tab {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      padding: 10px 8px;
+      color: var(--text-muted);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.2s;
+    }
+
+    .stem-tab.active {
+      background: rgba(245, 158, 11, 0.15);
+      border-color: var(--accent-gold);
+      color: #fff;
+      box-shadow: 0 0 14px rgba(245, 158, 11, 0.2);
+    }
+
+    .stem-sliders {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      padding-top: 8px;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .slider-track {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .slider-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    input[type="range"] {
+      accent-color: var(--accent-gold);
+      cursor: pointer;
+    }
+
+    /* Dubbing / Mic Recording Section */
+    .dub-station {
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.08), rgba(139, 92, 246, 0.08));
+      border: 1px solid rgba(245, 158, 11, 0.2);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .dub-info h4 {
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+
+    .dub-info p {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .record-btn {
+      background: #ef4444;
+      color: #fff;
+      border: none;
+      border-radius: 50px;
+      padding: 12px 24px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 16px rgba(239, 68, 68, 0.4);
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+
+    .record-btn.recording {
+      animation: micPulse 1s infinite alternate;
+      background: #dc2626;
+    }
+
+    @keyframes micPulse {
+      from { box-shadow: 0 0 10px rgba(239, 68, 68, 0.5); }
+      to { box-shadow: 0 0 25px rgba(239, 68, 68, 0.9); }
+    }
+
+    /* Chunk Studio & Rehearsal Flow */
+    .chunk-studio {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .active-chunk-box {
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.09), rgba(6, 182, 212, 0.09));
+      border: 1px solid rgba(245, 158, 11, 0.35);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      transition: all 0.3s ease;
+    }
+
+    .active-chunk-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .active-badge {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      background: rgba(245, 158, 11, 0.2);
+      border: 1px solid var(--accent-gold);
+      color: #fcd34d;
+      padding: 4px 10px;
+      border-radius: 20px;
+    }
+
+    .active-time {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--accent-cyan);
+    }
+
+    .active-prompt {
+      font-size: 18px;
+      font-weight: 700;
+      line-height: 1.4;
+      color: #fff;
+      background: rgba(0, 0, 0, 0.45);
+      padding: 14px 18px;
+      border-radius: var(--radius-sm);
+      border-left: 4px solid var(--accent-gold);
+      min-height: 52px;
+      display: flex;
+      align-items: center;
+    }
+
+    .chunk-button-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .btn-subtle {
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid var(--border-color);
+      color: #fff;
+      border-radius: 50px;
+      padding: 12px 20px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+
+    .btn-subtle:hover {
+      background: rgba(255, 255, 255, 0.15);
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    .btn-subtle.looping {
+      background: rgba(6, 182, 212, 0.2);
+      border-color: var(--accent-cyan);
+      color: #67e8f9;
+      animation: pulseSub 1.5s infinite;
+    }
+
+    .chunk-review-box {
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      border-radius: var(--radius-sm);
+      padding: 14px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .review-status {
+      font-size: 13px;
+      font-weight: 600;
+      color: #6ee7b7;
+    }
+
+    .review-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .btn-retry {
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      color: #fca5a5;
+      padding: 10px 18px;
+      border-radius: 30px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-retry:hover {
+      background: rgba(239, 68, 68, 0.3);
+      color: #fff;
+    }
+
+    .btn-accept {
+      background: linear-gradient(135deg, #10b981, #059669);
+      border: none;
+      color: #fff;
+      padding: 10px 22px;
+      border-radius: 30px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 4px 14px rgba(16, 185, 129, 0.4);
+      transition: transform 0.15s, box-shadow 0.2s;
+    }
+
+    .btn-accept:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(16, 185, 129, 0.5);
+    }
+
+    /* Assembly Card */
+    .assembly-card {
+      background: rgba(14, 20, 32, 0.9);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 18px 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .assembly-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .assembly-header h4 {
+      font-size: 15px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .assembly-header p {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .btn-assemble {
+      background: linear-gradient(135deg, #8b5cf6, #6366f1);
+      border: none;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(139, 92, 246, 0.4);
+      transition: all 0.2s;
+    }
+
+    .btn-assemble:hover:not(:disabled) {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(139, 92, 246, 0.6);
+    }
+
+    .btn-assemble:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 8px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #f59e0b, #10b981);
+      transition: width 0.3s ease;
+    }
+
+    .assembly-download-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #34d399;
+      padding-top: 6px;
+    }
+
+    .btn-download {
+      background: #10b981;
+      color: #000;
+      padding: 6px 14px;
+      border-radius: 20px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 12px;
+    }
+
+    /* Chunks list section */
+    .chunks-section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 8px;
+    }
+
+    .chunks-section-header h3 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .btn-text {
+      background: none;
+      border: none;
+      color: var(--accent-cyan);
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .btn-text:hover {
+      text-decoration: underline;
+    }
+
+    .chunks-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-height: 420px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+
+    .chunk-card {
+      background: rgba(18, 24, 38, 0.7);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .chunk-card:hover {
+      background: rgba(26, 34, 54, 0.85);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .chunk-card.active {
+      border-color: var(--accent-gold);
+      background: rgba(245, 158, 11, 0.08);
+      box-shadow: 0 0 16px rgba(245, 158, 11, 0.2);
+    }
+
+    .chunk-card.dubbed {
+      border-color: rgba(16, 185, 129, 0.6);
+      background: rgba(16, 185, 129, 0.05);
+    }
+
+    .chunk-card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .chunk-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .chunk-status-pill {
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-weight: 600;
+    }
+
+    .chunk-status-pill.pending {
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text-dim);
+    }
+
+    .chunk-status-pill.done {
+      background: rgba(16, 185, 129, 0.2);
+      border: 1px solid #10b981;
+      color: #34d399;
+    }
+
+    .chunk-trimmer-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 12px;
+      color: var(--text-muted);
+      background: rgba(0, 0, 0, 0.25);
+      padding: 6px 10px;
+      border-radius: var(--radius-sm);
+    }
+
+    .trimmer-control {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .trim-btn {
+      width: 22px;
+      height: 22px;
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--border-color);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .trim-btn:hover {
+      background: var(--accent-gold);
+      color: #000;
+    }
+
+    .chunk-card-actions {
+      display: flex;
+      gap: 8px;
+      justify-content: flex-end;
+    }
+
+    .btn-chunk-action {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-color);
+      color: #cbd5e1;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 5px 12px;
+      border-radius: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .btn-chunk-action:hover {
+      background: rgba(245, 158, 11, 0.2);
+      border-color: var(--accent-gold);
+      color: #fff;
+    }
+
+    /* Countdown overlay */
+    .countdown-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 20;
+      display: none;
+    }
+
+    .countdown-number {
+      font-family: 'Outfit', sans-serif;
+      font-size: 96px;
+      font-weight: 800;
+      color: var(--accent-gold);
+      text-shadow: 0 0 30px var(--accent-gold-glow);
+      animation: popIn 0.5s ease-out;
+    }
+
+    @keyframes popIn {
+      0% { transform: scale(0.4); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    /* Library list */
+    .library-section {
+      margin-top: 32px;
+      grid-column: 1 / -1;
+    }
+
+    .clips-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+      margin-top: 14px;
+    }
+
+    .clip-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .clip-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--accent-gold);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+    }
+
+    .clip-card-thumb {
+      width: 100%;
+      height: 140px;
+      background: #000;
+      object-fit: cover;
+    }
+
+    .clip-card-body {
+      padding: 14px;
+    }
+
+    .clip-card-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 6px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .clip-card-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: var(--text-dim);
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="brand">
+      <div class="brand-logo">🎙️</div>
+      <div class="brand-text">
+        <h1>DUBALIKE</h1>
+        <p>Voice Dubbing & Dialogue Studio for Indian Cinema</p>
+      </div>
+    </div>
+    <div class="lang-pills">
+      <span class="pill telugu">తెలుగు Cinema</span>
+      <span class="pill hindi">हिंदी Cinema</span>
+      <span class="pill">Meta Demucs AI</span>
+    </div>
+  </header>
+
+  <main>
+    <!-- Left Panel: Extraction Form -->
+    <section class="card">
+      <h2 class="card-title">📥 YouTube Dialogue Slicer</h2>
+
+      <div class="presets-label">⚡ Iconic Dialogue Presets</div>
+      <div class="presets-container">
+        <button class="preset-btn" onclick="applyPreset('https://www.youtube.com/watch?v=YmuRGDxEItQ', '00:00', '00:06', 'pushpa_thaggedhe_le', 'Telugu', 'Thaggedhe Le... Yevva thaggedhe le!')">
+          🔥 Pushpa (Telugu)
+        </button>
+        <button class="preset-btn" onclick="applyPreset('https://www.youtube.com/watch?v=A9-vN5W6cNk', '00:00', '00:15', 'brahmanandam_whistle', 'Telugu', 'Whistle Scene Comedy')">
+          😂 Brahmanandam (Telugu)
+        </button>
+        <button class="preset-btn" onclick="applyPreset('https://www.youtube.com/watch?v=5FXFnyRnl48', '00:00', '00:15', 'baburao_hera_pheri', 'Hindi', 'Yeh Baburao ka style hai!')">
+          👓 Baburao (Hindi)
+        </button>
+      </div>
+
+      <div class="form-group">
+        <label for="videoUrl">YouTube Video URL</label>
+        <input type="text" id="videoUrl" placeholder="https://www.youtube.com/watch?v=..." />
+      </div>
+
+      <div class="grid-2">
+        <div class="form-group">
+          <label for="startTime">Start Time (MM:SS)</label>
+          <input type="text" id="startTime" placeholder="00:15" />
+        </div>
+        <div class="form-group">
+          <label for="endTime">End Time (MM:SS)</label>
+          <input type="text" id="endTime" placeholder="00:27" />
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="form-group">
+          <label for="clipName">Clip Name / ID</label>
+          <input type="text" id="clipName" placeholder="e.g. pushpa_dialogue" />
+        </div>
+        <div class="form-group">
+          <label for="clipLanguage">Language</label>
+          <select id="clipLanguage">
+            <option value="Telugu">Telugu (తెలుగు)</option>
+            <option value="Hindi">Hindi (हिंदी)</option>
+            <option value="Tamil">Tamil (தமிழ்)</option>
+            <option value="English">English</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="dialogueScript">Dialogue Prompt / Karaoke Line (Optional)</label>
+        <textarea id="dialogueScript" rows="2" placeholder="Enter dialogue to display in teleprompter during dubbing..."></textarea>
+      </div>
+
+      <button id="processBtn" class="btn-primary" onclick="submitExtraction()">
+        ⚡ Download & Separate Audio Stems
+      </button>
+
+      <div id="statusBox" class="status-box">
+        <span class="spinner"></span>
+        <span id="statusText">Downloading video segment...</span>
+      </div>
+    </section>
+
+    <!-- Right Panel: Multi-track Studio & Dub Player -->
+    <section class="card studio-panel">
+      <h2 class="card-title">🎬 Stem Studio & Dubbing Viewport</h2>
+
+      <div class="video-viewport" id="viewport">
+        <div class="empty-state" id="emptyState">
+          <div class="empty-state-icon">🎥</div>
+          <p>Extract a clip from YouTube on the left, or select an existing clip from your library below to start listening and dubbing!</p>
+        </div>
+
+        <video id="mainVideo" style="display:none;" playsinline></video>
+        
+        <!-- Separate audio stem elements for clean mixing -->
+        <audio id="audioVocals" preload="auto"></audio>
+        <audio id="audioInstrumental" preload="auto"></audio>
+        <audio id="userDubAudio" preload="auto"></audio>
+
+        <div class="teleprompter-overlay" id="teleprompter">
+          "Dialogue line will appear here"
+        </div>
+
+        <div class="countdown-overlay" id="countdownOverlay">
+          <div class="countdown-number" id="countdownNum">3</div>
+        </div>
+      </div>
+
+      <!-- Multi-track Stem Switcher -->
+      <div class="mixer-bar" id="mixerBar" style="opacity: 0.4; pointer-events: none;">
+        <label>🎧 Audio Stem Mode</label>
+        <div class="stem-mode-tabs">
+          <button class="stem-tab active" id="tabFull" onclick="setStemMode('full')">
+            <span>🎬 Original Mix</span>
+            <small style="color:var(--text-dim);">Full movie audio</small>
+          </button>
+          <button class="stem-tab" id="tabVocals" onclick="setStemMode('vocals')">
+            <span>🗣️ Isolated Dialogue</span>
+            <small style="color:var(--text-dim);">Speech only</small>
+          </button>
+          <button class="stem-tab" id="tabBgm" onclick="setStemMode('instrumental')">
+            <span>🎵 Isolated BGM / SFX</span>
+            <small style="color:var(--text-dim);">Ready for dubbing</small>
+          </button>
+        </div>
+
+        <div class="stem-sliders">
+          <div class="slider-track">
+            <div class="slider-header">
+              <span>🗣️ Original Vocals Volume</span>
+              <span id="vocVolLabel">100%</span>
+            </div>
+            <input type="range" id="vocSlider" min="0" max="100" value="100" oninput="updateVolumes()" />
+          </div>
+          <div class="slider-track">
+            <div class="slider-header">
+              <span>🎵 Background Score (BGM) Volume</span>
+              <span id="bgmVolLabel">100%</span>
+            </div>
+            <input type="range" id="bgmSlider" min="0" max="100" value="100" oninput="updateVolumes()" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Interactive Dialogue Chunk Studio & Assembly Panel -->
+      <div class="chunk-studio" id="chunkStudio" style="opacity: 0.4; pointer-events: none;">
+        
+        <!-- Active Chunk Recording & Practice Station -->
+        <div class="active-chunk-box" id="activeChunkBox">
+          <div class="active-chunk-header">
+            <span class="active-badge" id="activeBadge">Line #1</span>
+            <span class="active-time" id="activeTime">00:00.0 - 00:00.0</span>
+          </div>
+
+          <!-- Big Dialogue Prompt -->
+          <div class="active-prompt" id="activePromptDisplay">
+            Select a dialogue line below to rehearse or record your dub!
+          </div>
+
+          <!-- Step 1 & 2 Action Buttons -->
+          <div class="chunk-button-row" id="chunkActionRow">
+            <button class="btn-subtle" id="practiceBtn" onclick="togglePracticeLoop()">
+              <span id="practiceBtnIcon">🔁</span>
+              <span id="practiceBtnText">Practice Line (Loop Voice)</span>
+            </button>
+            <button class="record-btn" id="recordChunkBtn" onclick="toggleChunkDubRecording()">
+              <span>🎙️</span>
+              <span id="recordChunkBtnText">Dub This Line</span>
+            </button>
+          </div>
+
+          <!-- Step 3 Review Box (Appears after recording) -->
+          <div class="chunk-review-box" id="chunkReviewBox" style="display: none;">
+            <div class="review-status">✨ Dub recorded! How does it sound over the movie BGM?</div>
+            <div class="review-actions">
+              <button class="btn-subtle" onclick="previewChunkDub()">
+                ▶️ Preview My Dub
+              </button>
+              <button class="btn-retry" onclick="retryChunkDub()">
+                🔄 Try Again
+              </button>
+              <button class="btn-accept" onclick="acceptChunkDub()">
+                ✅ Accept & Next Line
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Full Scene Assembly Card -->
+        <div class="assembly-card" id="assemblyCard">
+          <div class="assembly-header">
+            <div>
+              <h4>🎬 Full Scene Assembly</h4>
+              <p id="dubProgressText">0 of 0 lines dubbed</p>
+            </div>
+            <button class="btn-assemble" id="assembleBtn" onclick="assembleFullMovie()" disabled>
+              ⚡ Assemble Full Movie Dub
+            </button>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill" id="assemblyProgressFill" style="width: 0%;"></div>
+          </div>
+          <div class="assembly-download-row" id="assemblyDownloadRow" style="display: none;">
+            <span>🎉 Full dubbed movie scene ready!</span>
+            <button class="btn-subtle" onclick="playAssembledMovie()">🎬 Watch Full Dub</button>
+            <a id="downloadDubLink" class="btn-download" href="#" download>⬇️ Download Dubbed MP4</a>
+          </div>
+        </div>
+
+        <!-- Chunks List & Trimmer Header -->
+        <div class="chunks-section-header">
+          <h3>✂️ Dialogue Lines (<span id="chunksCount">0</span> detected)</h3>
+          <button class="btn-text" onclick="addNewChunk()">+ Add Manual Line</button>
+        </div>
+
+        <!-- Chunks List Container -->
+        <div class="chunks-list" id="chunksList">
+          <p style="color:var(--text-dim);font-size:13px;">Load a clip above to view dialogue segments.</p>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- Bottom: Library Grid -->
+    <section class="library-section">
+      <h2 class="card-title">📚 Processed Clip Library</h2>
+      <div class="clips-grid" id="clipsGrid">
+        <p style="color:var(--text-dim);">No clips processed yet. Paste a YouTube URL above to begin!</p>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    let currentClip = null;
+    let stemMode = 'full';
+    let currentSegments = [];
+    let activeChunkIndex = 0;
+    let isPracticeLooping = false;
+    let practiceInterval = null;
+    let mediaRecorder = null;
+    let recordedAudioChunks = [];
+    let isRecording = false;
+    let currentDubBlob = null;
+    let currentDubUrl = null;
+
+    const mainVideo = document.getElementById('mainVideo');
+    const userDubAudio = document.getElementById('userDubAudio');
+    const emptyState = document.getElementById('emptyState');
+    const mixerBar = document.getElementById('mixerBar');
+    const chunkStudio = document.getElementById('chunkStudio');
+    const teleprompter = document.getElementById('teleprompter');
+
+    function applyPreset(url, start, end, name, lang, script) {
+      document.getElementById('videoUrl').value = url;
+      document.getElementById('startTime').value = start;
+      document.getElementById('endTime').value = end;
+      document.getElementById('clipName').value = name.toLowerCase().replace(/[^a-z0-9]/g, '_');
+      document.getElementById('clipLanguage').value = lang;
+      document.getElementById('dialogueScript').value = script;
+    }
+
+    async function submitExtraction() {
+      const url = document.getElementById('videoUrl').value.trim();
+      const startTime = document.getElementById('startTime').value.trim();
+      const endTime = document.getElementById('endTime').value.trim();
+      const name = document.getElementById('clipName').value.trim();
+      const language = document.getElementById('clipLanguage').value;
+      const script = document.getElementById('dialogueScript').value.trim();
+
+      if (!url) {
+        alert('Please enter a YouTube video URL.');
+        return;
+      }
+
+      const processBtn = document.getElementById('processBtn');
+      const statusBox = document.getElementById('statusBox');
+      const statusText = document.getElementById('statusText');
+
+      processBtn.disabled = true;
+      statusBox.style.display = 'block';
+      statusText.innerText = 'Downloading video segment and running AI stem separation... (takes ~15-25s)';
+
+      try {
+        const response = await fetch('/api/process', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            url: url,
+            start_time: startTime || null,
+            end_time: endTime || null,
+            name: name || null,
+            language: language,
+            dialogue_script: script || null
+          })
+        });
+
+        if (!response.ok) {
+          const err = await response.json();
+          throw new Error(err.detail || 'Processing failed');
+        }
+
+        const data = await response.json();
+        statusText.innerText = '✨ Separation complete! Loading clip & dialogue chunks...';
+        await loadLibrary();
+        loadClip(data.clip_id);
+      } catch (err) {
+        alert('Error: ' + err.message);
+      } finally {
+        processBtn.disabled = false;
+        setTimeout(() => { statusBox.style.display = 'none'; }, 2000);
+      }
+    }
+
+    async function loadLibrary() {
+      try {
+        const res = await fetch('/api/clips');
+        const data = await res.json();
+        const grid = document.getElementById('clipsGrid');
+        grid.innerHTML = '';
+
+        if (!data.clips || data.clips.length === 0) {
+          grid.innerHTML = '<p style="color:var(--text-dim);">No clips processed yet. Paste a YouTube URL above to begin!</p>';
+          return;
+        }
+
+        data.clips.forEach(clip => {
+          const card = document.createElement('div');
+          card.className = 'clip-card';
+          card.onclick = () => loadClip(clip.id);
+          card.innerHTML = `
+            <img class="clip-card-thumb" src="${clip.thumbnail || 'https://via.placeholder.com/320x180'}" alt="${clip.title}" />
+            <div class="clip-card-body">
+              <div class="clip-card-title">${clip.title}</div>
+              <div class="clip-card-meta">
+                <span>${clip.language || 'Cinema'}</span>
+                <span>${clip.start_time ? clip.start_time + ' - ' + clip.end_time : 'Full'}</span>
+              </div>
+            </div>
+          `;
+          grid.appendChild(card);
+        });
+      } catch (e) {
+        console.error('Failed to load library:', e);
+      }
+    }
+
+    async function loadClip(clipId) {
+      stopPracticeLoop();
+      try {
+        const res = await fetch(`/api/clips/${clipId}`);
+        if (!res.ok) return;
+        currentClip = await res.json();
+
+        emptyState.style.display = 'none';
+        mainVideo.style.display = 'block';
+        mixerBar.style.opacity = '1';
+        mixerBar.style.pointerEvents = 'all';
+        chunkStudio.style.opacity = '1';
+        chunkStudio.style.pointerEvents = 'all';
+
+        // Load original video with studio-quality audio
+        mainVideo.src = `/media/${clipId}/video.mp4`;
+        mainVideo.muted = false;
+        mainVideo.controls = true;
+        userDubAudio.src = '';
+
+        syncDubAudioWithVideo();
+        setStemMode('full');
+
+        // Fetch dialogue segments
+        await fetchSegments(clipId);
+      } catch (e) {
+        console.error('Failed to load clip:', e);
+      }
+    }
+
+    function syncDubAudioWithVideo() {
+      mainVideo.onplay = () => {
+        if (userDubAudio.src && !userDubAudio.paused) {
+          userDubAudio.currentTime = mainVideo.currentTime;
+          userDubAudio.play().catch(() => {});
+        }
+      };
+
+      mainVideo.onpause = () => {
+        if (userDubAudio.src) userDubAudio.pause();
+      };
+
+      mainVideo.onseeked = () => {
+        if (userDubAudio.src) userDubAudio.currentTime = mainVideo.currentTime;
+      };
+    }
+
+    function setStemMode(mode) {
+      if (!currentClip) return;
+      stemMode = mode;
+      document.getElementById('tabFull').classList.toggle('active', mode === 'full');
+      document.getElementById('tabVocals').classList.toggle('active', mode === 'vocals');
+      document.getElementById('tabBgm').classList.toggle('active', mode === 'instrumental');
+
+      const vocSlider = document.getElementById('vocSlider');
+      const bgmSlider = document.getElementById('bgmSlider');
+
+      const curTime = mainVideo.currentTime || 0;
+      const isPlaying = !mainVideo.paused && !mainVideo.ended && mainVideo.readyState > 2;
+
+      let targetFile = 'video.mp4';
+      if (mode === 'full') {
+        vocSlider.value = 100;
+        bgmSlider.value = 100;
+        targetFile = 'video.mp4';
+      } else if (mode === 'vocals') {
+        vocSlider.value = 100;
+        bgmSlider.value = 0;
+        targetFile = 'video_vocals.mp4';
+      } else if (mode === 'instrumental') {
+        vocSlider.value = 0;
+        bgmSlider.value = 100;
+        targetFile = 'video_instrumental.mp4';
+      }
+
+      document.getElementById('vocVolLabel').innerText = vocSlider.value + '%';
+      document.getElementById('bgmVolLabel').innerText = bgmSlider.value + '%';
+
+      const targetPath = `/media/${currentClip.id}/${targetFile}`;
+      if (!mainVideo.src.endsWith(targetPath)) {
+        mainVideo.src = targetPath;
+        mainVideo.currentTime = curTime;
+        mainVideo.muted = false;
+        if (isPlaying) {
+          mainVideo.play().catch(() => {});
+        }
+      }
+    }
+
+    function updateVolumes() {
+      const vocVal = parseInt(document.getElementById('vocSlider').value, 10);
+      const bgmVal = parseInt(document.getElementById('bgmSlider').value, 10);
+
+      document.getElementById('vocVolLabel').innerText = vocVal + '%';
+      document.getElementById('bgmVolLabel').innerText = bgmVal + '%';
+
+      if (vocVal > 50 && bgmVal <= 20) {
+        setStemMode('vocals');
+      } else if (bgmVal > 50 && vocVal <= 20) {
+        setStemMode('instrumental');
+      } else if (vocVal > 40 && bgmVal > 40) {
+        setStemMode('full');
+      }
+    }
+
+    /* Dialogue Segments Management */
+    async function fetchSegments(clipId) {
+      try {
+        const res = await fetch(`/api/clips/${clipId}/segments`);
+        if (!res.ok) return;
+        const data = await res.json();
+        currentSegments = data.segments || [];
+        activeChunkIndex = 0;
+        renderSegmentsList();
+        updateActiveChunkView();
+        updateAssemblyStatus();
+      } catch (e) {
+        console.error('Failed to fetch segments:', e);
+      }
+    }
+
+    function renderSegmentsList() {
+      const container = document.getElementById('chunksList');
+      document.getElementById('chunksCount').innerText = currentSegments.length;
+      container.innerHTML = '';
+
+      if (currentSegments.length === 0) {
+        container.innerHTML = '<p style="color:var(--text-dim);font-size:13px;">No speech segments detected in this clip. Click "+ Add Manual Line" above!</p>';
+        return;
+      }
+
+      currentSegments.forEach((seg, idx) => {
+        const isSelected = idx === activeChunkIndex;
+        const card = document.createElement('div');
+        card.className = `chunk-card ${isSelected ? 'active' : ''} ${seg.dubbed ? 'dubbed' : ''}`;
+        card.onclick = (e) => {
+          if (e.target.tagName !== 'BUTTON' && e.target.tagName !== 'INPUT') {
+            selectChunk(idx);
+          }
+        };
+
+        const statusClass = seg.dubbed ? 'done' : 'pending';
+        const statusText = seg.dubbed ? 'Dubbed ✅' : 'Pending ⏳';
+
+        card.innerHTML = `
+          <div class="chunk-card-top">
+            <div class="chunk-label">
+              <span>#${idx + 1}</span>
+              <span class="chunk-status-pill ${statusClass}">${statusText}</span>
+            </div>
+            <div style="font-size:12px;color:var(--accent-cyan);font-weight:600;">
+              ${formatSec(seg.start)} - ${formatSec(seg.end)} (${(seg.end - seg.start).toFixed(1)}s)
+            </div>
+          </div>
+
+          <div class="chunk-trimmer-row">
+            <div class="trimmer-control">
+              <span>Start:</span>
+              <button class="trim-btn" onclick="adjustChunkTime(${idx}, 'start', -0.2)">-</button>
+              <span style="font-weight:700;color:#fff;">${seg.start.toFixed(1)}s</span>
+              <button class="trim-btn" onclick="adjustChunkTime(${idx}, 'start', 0.2)">+</button>
+            </div>
+            <div class="trimmer-control">
+              <span>End:</span>
+              <button class="trim-btn" onclick="adjustChunkTime(${idx}, 'end', -0.2)">-</button>
+              <span style="font-weight:700;color:#fff;">${seg.end.toFixed(1)}s</span>
+              <button class="trim-btn" onclick="adjustChunkTime(${idx}, 'end', 0.2)">+</button>
+            </div>
+          </div>
+
+          <input type="text" class="chunk-dialogue-input" value="${seg.text || ''}" 
+                 placeholder="Enter dialogue line / subtitle..." 
+                 onchange="updateChunkText(${idx}, this.value)" />
+
+          <div class="chunk-card-actions">
+            <button class="btn-chunk-action" onclick="playChunkOnce(${idx})">
+              <span>🎧</span> Practice
+            </button>
+            <button class="btn-chunk-action" style="color:var(--accent-gold);" onclick="selectChunk(${idx})">
+              <span>🎙️</span> Select to Dub
+            </button>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function selectChunk(index) {
+      stopPracticeLoop();
+      activeChunkIndex = index;
+      document.getElementById('chunkReviewBox').style.display = 'none';
+      document.getElementById('chunkActionRow').style.display = 'flex';
+      renderSegmentsList();
+      updateActiveChunkView();
+    }
+
+    function updateActiveChunkView() {
+      if (!currentSegments || currentSegments.length === 0 || !currentSegments[activeChunkIndex]) {
+        document.getElementById('activeBadge').innerText = 'No Line';
+        document.getElementById('activeTime').innerText = '00:00 - 00:00';
+        document.getElementById('activePromptDisplay').innerText = 'No dialogue segments available.';
+        return;
+      }
+
+      const chunk = currentSegments[activeChunkIndex];
+      document.getElementById('activeBadge').innerText = `Line #${activeChunkIndex + 1} of ${currentSegments.length}`;
+      document.getElementById('activeTime').innerText = `${formatSec(chunk.start)} - ${formatSec(chunk.end)} (${(chunk.end - chunk.start).toFixed(1)}s)`;
+      
+      const promptText = chunk.text ? `"${chunk.text}"` : `Line #${activeChunkIndex + 1} (No script text entered)`;
+      document.getElementById('activePromptDisplay').innerText = promptText;
+
+      // Update teleprompter
+      teleprompter.innerText = chunk.text || `Line #${activeChunkIndex + 1}`;
+      teleprompter.classList.add('active');
+    }
+
+    function adjustChunkTime(index, field, delta) {
+      const chunk = currentSegments[index];
+      if (!chunk) return;
+
+      if (field === 'start') {
+        chunk.start = Math.max(0, Math.round((chunk.start + delta) * 10) / 10);
+        if (chunk.start >= chunk.end) chunk.start = chunk.end - 0.2;
+      } else {
+        chunk.end = Math.round((chunk.end + delta) * 10) / 10;
+        if (chunk.end <= chunk.start) chunk.end = chunk.start + 0.2;
+      }
+      chunk.duration = Math.round((chunk.end - chunk.start) * 10) / 10;
+      renderSegmentsList();
+      if (index === activeChunkIndex) updateActiveChunkView();
+      saveSegmentsToServer();
+    }
+
+    function updateChunkText(index, text) {
+      if (currentSegments[index]) {
+        currentSegments[index].text = text;
+        if (index === activeChunkIndex) updateActiveChunkView();
+        saveSegmentsToServer();
+      }
+    }
+
+    function addNewChunk() {
+      const last = currentSegments[currentSegments.length - 1];
+      const start = last ? Math.round((last.end + 0.5) * 10) / 10 : 0.0;
+      const end = start + 2.0;
+      currentSegments.push({
+        id: `chunk_${currentSegments.length}`,
+        start: start,
+        end: end,
+        duration: 2.0,
+        text: '',
+        dubbed: false
+      });
+      activeChunkIndex = currentSegments.length - 1;
+      renderSegmentsList();
+      updateActiveChunkView();
+      saveSegmentsToServer();
+    }
+
+    async function saveSegmentsToServer() {
+      if (!currentClip) return;
+      try {
+        await fetch(`/api/clips/${currentClip.id}/segments`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ segments: currentSegments })
+        });
+      } catch (e) {
+        console.error('Failed to save segments:', e);
+      }
+    }
+
+    /* Practice Loop Flow */
+    function togglePracticeLoop() {
+      if (isPracticeLooping) {
+        stopPracticeLoop();
+      } else {
+        startPracticeLoop();
+      }
+    }
+
+    function startPracticeLoop() {
+      if (!currentSegments[activeChunkIndex] || !currentClip) return;
+      const chunk = currentSegments[activeChunkIndex];
+
+      isPracticeLooping = true;
+      document.getElementById('practiceBtn').classList.add('looping');
+      document.getElementById('practiceBtnIcon').innerText = '⏹️';
+      document.getElementById('practiceBtnText').innerText = 'Stop Practice Loop';
+
+      // Play isolated dialogue or original video so user hears the actor clearly
+      const targetSrc = `/media/${currentClip.id}/video_vocals.mp4`;
+      if (!mainVideo.src.endsWith(targetSrc)) {
+        mainVideo.src = targetSrc;
+      }
+
+      mainVideo.currentTime = chunk.start;
+      mainVideo.play().catch(() => {});
+
+      if (practiceInterval) clearInterval(practiceInterval);
+      practiceInterval = setInterval(() => {
+        if (!isPracticeLooping) return;
+        if (mainVideo.currentTime >= chunk.end || mainVideo.paused) {
+          mainVideo.currentTime = chunk.start;
+          mainVideo.play().catch(() => {});
+        }
+      }, 50);
+    }
+
+    function stopPracticeLoop() {
+      isPracticeLooping = false;
+      if (practiceInterval) clearInterval(practiceInterval);
+      practiceInterval = null;
+
+      const pBtn = document.getElementById('practiceBtn');
+      if (pBtn) {
+        pBtn.classList.remove('looping');
+        document.getElementById('practiceBtnIcon').innerText = '🔁';
+        document.getElementById('practiceBtnText').innerText = 'Practice Line (Loop Voice)';
+      }
+      if (mainVideo && !mainVideo.paused) mainVideo.pause();
+    }
+
+    function playChunkOnce(index) {
+      stopPracticeLoop();
+      selectChunk(index);
+      const chunk = currentSegments[index];
+      const targetSrc = `/media/${currentClip.id}/video_vocals.mp4`;
+      if (!mainVideo.src.endsWith(targetSrc)) mainVideo.src = targetSrc;
+      mainVideo.currentTime = chunk.start;
+      mainVideo.play().catch(() => {});
+
+      const checkStop = setInterval(() => {
+        if (mainVideo.currentTime >= chunk.end) {
+          mainVideo.pause();
+          clearInterval(checkStop);
+        }
+      }, 50);
+    }
+
+    /* Dub Line Recording Flow */
+    async function toggleChunkDubRecording() {
+      stopPracticeLoop();
+      if (isRecording) {
+        stopChunkDubRecording();
+        return;
+      }
+
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        startChunkCountdownAndRecord(stream);
+      } catch (err) {
+        alert('Could not access microphone: ' + err.message);
+      }
+    }
+
+    function startChunkCountdownAndRecord(stream) {
+      const countdownOverlay = document.getElementById('countdownOverlay');
+      const countdownNum = document.getElementById('countdownNum');
+      countdownOverlay.style.display = 'flex';
+
+      let count = 3;
+      countdownNum.innerText = count;
+
+      const timer = setInterval(() => {
+        count--;
+        if (count > 0) {
+          countdownNum.innerText = count;
+        } else {
+          clearInterval(timer);
+          countdownOverlay.style.display = 'none';
+          beginChunkDub(stream);
+        }
+      }, 850);
+    }
+
+    function beginChunkDub(stream) {
+      if (!currentSegments[activeChunkIndex] || !currentClip) return;
+      const chunk = currentSegments[activeChunkIndex];
+
+      isRecording = true;
+      recordedAudioChunks = [];
+      mediaRecorder = new MediaRecorder(stream);
+
+      mediaRecorder.ondataavailable = e => {
+        if (e.data.size > 0) recordedAudioChunks.push(e.data);
+      };
+
+      mediaRecorder.onstop = () => {
+        currentDubBlob = new Blob(recordedAudioChunks, { type: 'audio/webm' });
+        currentDubUrl = URL.createObjectURL(currentDubBlob);
+        userDubAudio.src = currentDubUrl;
+
+        // Show review box
+        document.getElementById('chunkActionRow').style.display = 'none';
+        document.getElementById('chunkReviewBox').style.display = 'flex';
+        previewChunkDub();
+      };
+
+      mediaRecorder.start();
+
+      // Play BGM track only for the chunk
+      const targetSrc = `/media/${currentClip.id}/video_instrumental.mp4`;
+      if (!mainVideo.src.endsWith(targetSrc)) mainVideo.src = targetSrc;
+      mainVideo.currentTime = chunk.start;
+      mainVideo.play().catch(() => {});
+
+      document.getElementById('recordChunkBtn').classList.add('recording');
+      document.getElementById('recordChunkBtnText').innerText = 'Recording Line...';
+
+      // Auto-stop at chunk.end
+      const autoStopInterval = setInterval(() => {
+        if (!isRecording) {
+          clearInterval(autoStopInterval);
+          return;
+        }
+        if (mainVideo.currentTime >= chunk.end) {
+          stopChunkDubRecording();
+          clearInterval(autoStopInterval);
+        }
+      }, 40);
+    }
+
+    function stopChunkDubRecording() {
+      if (mediaRecorder && isRecording) {
+        mediaRecorder.stop();
+        mediaRecorder.stream.getTracks().forEach(t => t.stop());
+      }
+      isRecording = false;
+      document.getElementById('recordChunkBtn').classList.remove('recording');
+      document.getElementById('recordChunkBtnText').innerText = 'Dub This Line';
+      if (mainVideo && !mainVideo.paused) mainVideo.pause();
+    }
+
+    /* Review & Approval */
+    function previewChunkDub() {
+      if (!currentSegments[activeChunkIndex] || !currentClip) return;
+      const chunk = currentSegments[activeChunkIndex];
+
+      // Play video with instrumental BGM, plus user's recorded audio
+      const targetSrc = `/media/${currentClip.id}/video_instrumental.mp4`;
+      if (!mainVideo.src.endsWith(targetSrc)) mainVideo.src = targetSrc;
+      mainVideo.currentTime = chunk.start;
+      if (userDubAudio.src) {
+        userDubAudio.currentTime = 0;
+        userDubAudio.play().catch(() => {});
+      }
+      mainVideo.play().catch(() => {});
+
+      const checkEnd = setInterval(() => {
+        if (mainVideo.currentTime >= chunk.end || mainVideo.paused) {
+          mainVideo.pause();
+          if (userDubAudio) userDubAudio.pause();
+          clearInterval(checkEnd);
+        }
+      }, 50);
+    }
+
+    function retryChunkDub() {
+      document.getElementById('chunkReviewBox').style.display = 'none';
+      document.getElementById('chunkActionRow').style.display = 'flex';
+      toggleChunkDubRecording();
+    }
+
+    async function acceptChunkDub() {
+      if (!currentSegments[activeChunkIndex] || !currentClip || !currentDubBlob) return;
+      const chunk = currentSegments[activeChunkIndex];
+
+      const formData = new FormData();
+      formData.append('chunk_id', chunk.id);
+      formData.append('file', currentDubBlob, `${chunk.id}.webm`);
+
+      try {
+        const res = await fetch(`/api/clips/${currentClip.id}/dub-chunk`, {
+          method: 'POST',
+          body: formData
+        });
+        if (!res.ok) throw new Error('Failed to upload chunk dub');
+
+        chunk.dubbed = true;
+        renderSegmentsList();
+        updateAssemblyStatus();
+
+        // Advance to next chunk if exists
+        if (activeChunkIndex < currentSegments.length - 1) {
+          selectChunk(activeChunkIndex + 1);
+        } else {
+          document.getElementById('chunkReviewBox').style.display = 'none';
+          document.getElementById('chunkActionRow').style.display = 'flex';
+          alert('🎉 All dialogue lines dubbed! Click "Assemble Full Movie Dub" to watch the full scene!');
+        }
+      } catch (err) {
+        alert('Error saving dub: ' + err.message);
+      }
+    }
+
+    function updateAssemblyStatus() {
+      const dubbedCount = currentSegments.filter(s => s.dubbed).length;
+      const total = currentSegments.length;
+      document.getElementById('dubProgressText').innerText = `${dubbedCount} of ${total} lines dubbed`;
+
+      const pct = total > 0 ? (dubbedCount / total) * 100 : 0;
+      document.getElementById('assemblyProgressFill').style.width = `${pct}%`;
+
+      const assembleBtn = document.getElementById('assembleBtn');
+      assembleBtn.disabled = dubbedCount === 0;
+    }
+
+    /* Assembly */
+    async function assembleFullMovie() {
+      if (!currentClip) return;
+      const btn = document.getElementById('assembleBtn');
+      btn.disabled = true;
+      btn.innerText = '⏳ Assembling...';
+
+      try {
+        const res = await fetch(`/api/clips/${currentClip.id}/assemble`, {
+          method: 'POST'
+        });
+        if (!res.ok) {
+          const err = await res.json();
+          throw new Error(err.detail || 'Assembly failed');
+        }
+
+        const data = await res.json();
+        const downloadRow = document.getElementById('assemblyDownloadRow');
+        downloadRow.style.display = 'flex';
+
+        const downloadLink = document.getElementById('downloadDubLink');
+        downloadLink.href = data.video_url;
+
+        // Play the final assembled video directly!
+        mainVideo.src = data.video_url + '?t=' + Date.now();
+        mainVideo.currentTime = 0;
+        mainVideo.muted = false;
+        mainVideo.play().catch(() => {});
+      } catch (err) {
+        alert('Assembly error: ' + err.message);
+      } finally {
+        btn.disabled = false;
+        btn.innerText = '⚡ Assemble Full Movie Dub';
+      }
+    }
+
+    function playAssembledMovie() {
+      if (!currentClip) return;
+      mainVideo.src = `/media/${currentClip.id}/video_dubbed_final.mp4?t=` + Date.now();
+      mainVideo.currentTime = 0;
+      mainVideo.muted = false;
+      mainVideo.play().catch(() => {});
+    }
+
+    function formatSec(seconds) {
+      const mins = Math.floor(seconds / 60);
+      const secs = (seconds % 60).toFixed(1);
+      return `${mins.toString().padStart(2, '0')}:${secs < 10 ? '0' : ''}${secs}`;
+    }
+
+    // Initial load
+    loadLibrary();
+  </script>
+</body>
+</html>

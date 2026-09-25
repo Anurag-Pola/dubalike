@@ -1,0 +1,27 @@
+# Virtual Environment
+.venv/
+env/
+venv/
+ENV/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Data and Media Downloads (clips, stems, user dubs)
+data/
+data/*
+!data/.gitkeep
+
+# macOS metadata
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Logs & temp
+*.log
+*.part
+_demucs_temp/
+temp/
