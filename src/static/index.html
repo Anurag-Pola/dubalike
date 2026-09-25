@@ -18,6 +18,7 @@
       --accent-gold-glow: rgba(245, 158, 11, 0.4);
       --accent-cyan: #06b6d4;
       --accent-purple: #8b5cf6;
+      --accent-emerald: #10b981;
       --text-main: #f8fafc;
       --text-muted: #94a3b8;
       --text-dim: #64748b;
@@ -45,7 +46,7 @@
     }
 
     header {
-      padding: 24px 32px;
+      padding: 20px 32px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -183,7 +184,7 @@
       gap: 12px;
     }
 
-    /* Quick Presets */
+    /* Presets */
     .presets-label {
       font-size: 11px;
       text-transform: uppercase;
@@ -216,7 +217,7 @@
       color: #fff;
     }
 
-    /* Action Button */
+    /* Buttons */
     .btn-primary {
       width: 100%;
       background: linear-gradient(135deg, #f59e0b, #d97706);
@@ -311,7 +312,6 @@
       opacity: 0.7;
     }
 
-    /* Teleprompter Subtitles Overlay */
     .teleprompter-overlay {
       position: absolute;
       bottom: 24px;
@@ -341,7 +341,7 @@
       50% { border-color: rgba(6, 182, 212, 0.7); }
     }
 
-    /* Audio Stem Mixer Controls */
+    /* Mixer Controls */
     .mixer-bar {
       display: flex;
       flex-direction: column;
@@ -405,57 +405,6 @@
     input[type="range"] {
       accent-color: var(--accent-gold);
       cursor: pointer;
-    }
-
-    /* Dubbing / Mic Recording Section */
-    .dub-station {
-      background: linear-gradient(135deg, rgba(245, 158, 11, 0.08), rgba(139, 92, 246, 0.08));
-      border: 1px solid rgba(245, 158, 11, 0.2);
-      border-radius: var(--radius-md);
-      padding: 20px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-    }
-
-    .dub-info h4 {
-      font-size: 16px;
-      font-weight: 700;
-      color: #fff;
-      margin-bottom: 4px;
-    }
-
-    .dub-info p {
-      font-size: 12px;
-      color: var(--text-muted);
-    }
-
-    .record-btn {
-      background: #ef4444;
-      color: #fff;
-      border: none;
-      border-radius: 50px;
-      padding: 12px 24px;
-      font-size: 14px;
-      font-weight: 700;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      box-shadow: 0 4px 16px rgba(239, 68, 68, 0.4);
-      transition: all 0.2s;
-      white-space: nowrap;
-    }
-
-    .record-btn.recording {
-      animation: micPulse 1s infinite alternate;
-      background: #dc2626;
-    }
-
-    @keyframes micPulse {
-      from { box-shadow: 0 0 10px rgba(239, 68, 68, 0.5); }
-      to { box-shadow: 0 0 25px rgba(239, 68, 68, 0.9); }
     }
 
     /* Chunk Studio & Rehearsal Flow */
@@ -526,8 +475,8 @@
       border: 1px solid var(--border-color);
       color: #fff;
       border-radius: 50px;
-      padding: 12px 20px;
-      font-size: 14px;
+      padding: 10px 18px;
+      font-size: 13px;
       font-weight: 600;
       cursor: pointer;
       display: flex;
@@ -541,71 +490,25 @@
       border-color: rgba(255, 255, 255, 0.3);
     }
 
-    .btn-subtle.looping {
-      background: rgba(6, 182, 212, 0.2);
-      border-color: var(--accent-cyan);
-      color: #67e8f9;
-      animation: pulseSub 1.5s infinite;
-    }
-
-    .chunk-review-box {
-      background: rgba(16, 185, 129, 0.1);
-      border: 1px solid rgba(16, 185, 129, 0.35);
-      border-radius: var(--radius-sm);
-      padding: 14px 18px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .review-status {
-      font-size: 13px;
-      font-weight: 600;
-      color: #6ee7b7;
-    }
-
-    .review-actions {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .btn-retry {
-      background: rgba(239, 68, 68, 0.15);
-      border: 1px solid rgba(239, 68, 68, 0.4);
-      color: #fca5a5;
-      padding: 10px 18px;
-      border-radius: 30px;
-      font-size: 13px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .btn-retry:hover {
-      background: rgba(239, 68, 68, 0.3);
+    .btn-dub-launch {
+      background: linear-gradient(135deg, #ef4444, #dc2626);
       color: #fff;
-    }
-
-    .btn-accept {
-      background: linear-gradient(135deg, #10b981, #059669);
       border: none;
-      color: #fff;
+      border-radius: 50px;
       padding: 10px 22px;
-      border-radius: 30px;
-      font-size: 13px;
+      font-size: 14px;
       font-weight: 700;
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 6px;
-      box-shadow: 0 4px 14px rgba(16, 185, 129, 0.4);
-      transition: transform 0.15s, box-shadow 0.2s;
+      gap: 8px;
+      box-shadow: 0 4px 16px rgba(239, 68, 68, 0.4);
+      transition: all 0.2s;
     }
 
-    .btn-accept:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 6px 20px rgba(16, 185, 129, 0.5);
+    .btn-dub-launch:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 22px rgba(239, 68, 68, 0.6);
     }
 
     /* Assembly Card */
@@ -749,13 +652,12 @@
 
     .chunk-card.active {
       border-color: var(--accent-gold);
-      background: rgba(245, 158, 11, 0.08);
-      box-shadow: 0 0 16px rgba(245, 158, 11, 0.2);
+      background: rgba(26, 34, 54, 0.95);
+      box-shadow: 0 0 20px rgba(245, 158, 11, 0.15);
     }
 
     .chunk-card.dubbed {
-      border-color: rgba(16, 185, 129, 0.6);
-      background: rgba(16, 185, 129, 0.05);
+      border-left: 4px solid var(--accent-emerald);
     }
 
     .chunk-card-top {
@@ -768,9 +670,8 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      font-size: 13px;
       font-weight: 700;
-      color: #fff;
+      font-size: 13px;
     }
 
     .chunk-status-pill {
@@ -855,33 +756,6 @@
       color: #fff;
     }
 
-    /* Countdown overlay */
-    .countdown-overlay {
-      position: absolute;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.85);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      z-index: 20;
-      display: none;
-    }
-
-    .countdown-number {
-      font-family: 'Outfit', sans-serif;
-      font-size: 96px;
-      font-weight: 800;
-      color: var(--accent-gold);
-      text-shadow: 0 0 30px var(--accent-gold-glow);
-      animation: popIn 0.5s ease-out;
-    }
-
-    @keyframes popIn {
-      0% { transform: scale(0.4); opacity: 0; }
-      100% { transform: scale(1); opacity: 1; }
-    }
-
     /* Library list */
     .library-section {
       margin-top: 32px;
@@ -937,6 +811,423 @@
       justify-content: space-between;
       font-size: 11px;
       color: var(--text-dim);
+    }
+
+    /* ==========================================================================
+       DEDICATED DUBBING BOOTH MODAL (FOCUSED TRIMMED VIDEO + REAL-TIME WAVEFORM)
+       ========================================================================== */
+    .dub-modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(4, 7, 14, 0.88);
+      backdrop-filter: blur(18px);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      animation: modalFadeIn 0.25s ease-out;
+    }
+
+    .dub-modal-backdrop.open {
+      display: flex;
+    }
+
+    @keyframes modalFadeIn {
+      from { opacity: 0; transform: scale(0.98); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .dub-modal-window {
+      background: #0c1220;
+      border: 1px solid rgba(245, 158, 11, 0.35);
+      border-radius: 22px;
+      max-width: 920px;
+      width: 100%;
+      max-height: 92vh;
+      overflow-y: auto;
+      box-shadow: 0 25px 70px rgba(0, 0, 0, 0.8), 0 0 30px rgba(245, 158, 11, 0.15);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .modal-header {
+      padding: 18px 24px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(18, 24, 38, 0.6);
+    }
+
+    .modal-title-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .modal-badge {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 4px 12px;
+      border-radius: 20px;
+      background: rgba(245, 158, 11, 0.2);
+      border: 1px solid var(--accent-gold);
+      color: #fcd34d;
+    }
+
+    .modal-time-range {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--accent-cyan);
+    }
+
+    .modal-close-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--border-color);
+      color: #cbd5e1;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .modal-close-btn:hover {
+      background: rgba(239, 68, 68, 0.2);
+      border-color: #ef4444;
+      color: #fff;
+    }
+
+    .modal-body {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* Constrained Trimmed Video Container */
+    .modal-video-container {
+      position: relative;
+      background: #000;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      aspect-ratio: 16 / 9;
+      max-height: 360px;
+      margin: 0 auto;
+      width: 100%;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+    }
+
+    .modal-video-container video {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .modal-video-controls {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .btn-pill-mode {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border-color);
+      color: var(--text-muted);
+      border-radius: 30px;
+      padding: 8px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .btn-pill-mode:hover {
+      background: rgba(255, 255, 255, 0.12);
+      color: #fff;
+    }
+
+    .btn-pill-mode.active {
+      background: rgba(245, 158, 11, 0.2);
+      border-color: var(--accent-gold);
+      color: #fcd34d;
+    }
+
+    /* Dialogue Line Prompt Box */
+    .modal-dialogue-card {
+      background: rgba(14, 20, 32, 0.85);
+      border: 1px solid var(--border-color);
+      border-left: 5px solid var(--accent-gold);
+      border-radius: var(--radius-md);
+      padding: 16px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .modal-dialogue-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-dim);
+    }
+
+    .modal-dialogue-text {
+      font-size: 20px;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.4;
+    }
+
+    .modal-dialogue-input {
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 6px;
+      padding: 8px 12px;
+      color: #fff;
+      font-size: 14px;
+      width: 100%;
+    }
+
+    /* Voice Oscilloscope / Waveform Section */
+    .waveform-card {
+      background: rgba(10, 14, 24, 0.95);
+      border: 1px solid rgba(245, 158, 11, 0.25);
+      border-radius: var(--radius-md);
+      padding: 16px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.6);
+    }
+
+    .waveform-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .waveform-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .mic-level-pill {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text-muted);
+      border: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .mic-level-pill.active {
+      background: rgba(16, 185, 129, 0.15);
+      border-color: var(--accent-emerald);
+      color: #34d399;
+    }
+
+    .mic-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--text-dim);
+    }
+
+    .mic-dot.live {
+      background: #ef4444;
+      box-shadow: 0 0 8px #ef4444;
+      animation: pulseSub 1s infinite alternate;
+    }
+
+    .waveform-canvas-wrapper {
+      width: 100%;
+      height: 90px;
+      background: rgba(0, 0, 0, 0.5);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      position: relative;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    #waveformCanvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .timing-hint {
+      font-size: 12px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Modal Recording Controls */
+    .modal-record-controls {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      padding: 10px 0;
+    }
+
+    .btn-record-main {
+      background: linear-gradient(135deg, #ef4444, #dc2626);
+      color: #fff;
+      border: none;
+      border-radius: 50px;
+      padding: 16px 36px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
+      transition: all 0.2s;
+    }
+
+    .btn-record-main:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(239, 68, 68, 0.6);
+    }
+
+    .btn-record-main.recording {
+      background: #dc2626;
+      animation: micPulse 1s infinite alternate;
+    }
+
+    .record-timer-text {
+      font-size: 15px;
+      font-weight: 700;
+      color: #fcd34d;
+      display: none;
+    }
+
+    /* Modal Review Stage */
+    .modal-review-panel {
+      background: rgba(16, 185, 129, 0.08);
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      border-radius: var(--radius-md);
+      padding: 18px 22px;
+      display: none;
+      flex-direction: column;
+      gap: 14px;
+      animation: modalFadeIn 0.3s ease-out;
+    }
+
+    .review-banner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .review-text-highlight {
+      font-size: 14px;
+      font-weight: 700;
+      color: #34d399;
+    }
+
+    .silence-trimmed-badge {
+      font-size: 11px;
+      font-weight: 600;
+      background: rgba(6, 182, 212, 0.2);
+      border: 1px solid var(--accent-cyan);
+      color: #67e8f9;
+      padding: 3px 10px;
+      border-radius: 12px;
+    }
+
+    .review-btn-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .btn-preview-dub {
+      background: linear-gradient(135deg, #06b6d4, #0284c7);
+      color: #fff;
+      border: none;
+      border-radius: 30px;
+      padding: 12px 24px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 14px rgba(6, 182, 212, 0.4);
+      transition: all 0.2s;
+    }
+
+    .btn-preview-dub:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(6, 182, 212, 0.6);
+    }
+
+    .btn-save-line {
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: #fff;
+      border: none;
+      border-radius: 30px;
+      padding: 12px 24px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 14px rgba(16, 185, 129, 0.4);
+      transition: all 0.2s;
+    }
+
+    .btn-save-line:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(16, 185, 129, 0.6);
+    }
+
+    .btn-redo-line {
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      color: #fca5a5;
+      border-radius: 30px;
+      padding: 12px 20px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .btn-redo-line:hover {
+      background: rgba(239, 68, 68, 0.3);
+      color: #fff;
     }
   </style>
 </head>
@@ -1033,50 +1324,42 @@
         </div>
 
         <video id="mainVideo" style="display:none;" playsinline></video>
-        
-        <!-- Separate audio stem elements for clean mixing -->
-        <audio id="audioVocals" preload="auto"></audio>
-        <audio id="audioInstrumental" preload="auto"></audio>
         <audio id="userDubAudio" preload="auto"></audio>
 
         <div class="teleprompter-overlay" id="teleprompter">
           "Dialogue line will appear here"
         </div>
-
-        <div class="countdown-overlay" id="countdownOverlay">
-          <div class="countdown-number" id="countdownNum">3</div>
-        </div>
       </div>
 
-      <!-- Multi-track Stem Switcher -->
-      <div class="mixer-bar" id="mixerBar" style="opacity: 0.4; pointer-events: none;">
-        <label>🎧 Audio Stem Mode</label>
+      <!-- Audio Stem Mode Tabs & Sliders -->
+      <div class="mixer-bar" id="mixerBar" style="opacity:0.4;pointer-events:none;">
         <div class="stem-mode-tabs">
           <button class="stem-tab active" id="tabFull" onclick="setStemMode('full')">
-            <span>🎬 Original Mix</span>
-            <small style="color:var(--text-dim);">Full movie audio</small>
+            <span>🎭 Full Scene</span>
+            <small style="color:var(--text-dim);font-size:10px;">Vocals + BGM</small>
           </button>
           <button class="stem-tab" id="tabVocals" onclick="setStemMode('vocals')">
-            <span>🗣️ Isolated Dialogue</span>
-            <small style="color:var(--text-dim);">Speech only</small>
+            <span>🗣️ Original Vocals</span>
+            <small style="color:var(--text-dim);font-size:10px;">Dialogue Only</small>
           </button>
           <button class="stem-tab" id="tabBgm" onclick="setStemMode('instrumental')">
-            <span>🎵 Isolated BGM / SFX</span>
-            <small style="color:var(--text-dim);">Ready for dubbing</small>
+            <span>🎵 Karaoke BGM</span>
+            <small style="color:var(--text-dim);font-size:10px;">Dubbing Ready</small>
           </button>
         </div>
 
         <div class="stem-sliders">
           <div class="slider-track">
             <div class="slider-header">
-              <span>🗣️ Original Vocals Volume</span>
+              <span>Original Dialogue</span>
               <span id="vocVolLabel">100%</span>
             </div>
             <input type="range" id="vocSlider" min="0" max="100" value="100" oninput="updateVolumes()" />
           </div>
+
           <div class="slider-track">
             <div class="slider-header">
-              <span>🎵 Background Score (BGM) Volume</span>
+              <span>Music & Ambience</span>
               <span id="bgmVolLabel">100%</span>
             </div>
             <input type="range" id="bgmSlider" min="0" max="100" value="100" oninput="updateVolumes()" />
@@ -1084,55 +1367,36 @@
         </div>
       </div>
 
-      <!-- Interactive Dialogue Chunk Studio & Assembly Panel -->
-      <div class="chunk-studio" id="chunkStudio" style="opacity: 0.4; pointer-events: none;">
-        
-        <!-- Active Chunk Recording & Practice Station -->
+      <!-- Dialogue Chunk Studio & Rehearsal Flow -->
+      <div class="chunk-studio" id="chunkStudio" style="opacity:0.4;pointer-events:none;">
         <div class="active-chunk-box" id="activeChunkBox">
           <div class="active-chunk-header">
-            <span class="active-badge" id="activeBadge">Line #1</span>
-            <span class="active-time" id="activeTime">00:00.0 - 00:00.0</span>
+            <span class="active-badge" id="activeBadge">Line #1 of 3</span>
+            <span class="active-time" id="activeTime">00:00 - 00:03</span>
           </div>
 
-          <!-- Big Dialogue Prompt -->
           <div class="active-prompt" id="activePromptDisplay">
-            Select a dialogue line below to rehearse or record your dub!
+            "Loading dialogue line..."
           </div>
 
-          <!-- Step 1 & 2 Action Buttons -->
-          <div class="chunk-button-row" id="chunkActionRow">
-            <button class="btn-subtle" id="practiceBtn" onclick="togglePracticeLoop()">
-              <span id="practiceBtnIcon">🔁</span>
-              <span id="practiceBtnText">Practice Line (Loop Voice)</span>
+          <div class="chunk-button-row">
+            <button class="btn-subtle" onclick="previewActiveChunkOriginal()">
+              <span>👂</span> Original Line
             </button>
-            <button class="record-btn" id="recordChunkBtn" onclick="toggleChunkDubRecording()">
-              <span>🎙️</span>
-              <span id="recordChunkBtnText">Dub This Line</span>
+            <button class="btn-subtle" onclick="previewActiveChunkBgm()">
+              <span>🎵</span> Karaoke Line
             </button>
-          </div>
-
-          <!-- Step 3 Review Box (Appears after recording) -->
-          <div class="chunk-review-box" id="chunkReviewBox" style="display: none;">
-            <div class="review-status">✨ Dub recorded! How does it sound over the movie BGM?</div>
-            <div class="review-actions">
-              <button class="btn-subtle" onclick="previewChunkDub()">
-                ▶️ Preview My Dub
-              </button>
-              <button class="btn-retry" onclick="retryChunkDub()">
-                🔄 Try Again
-              </button>
-              <button class="btn-accept" onclick="acceptChunkDub()">
-                ✅ Accept & Next Line
-              </button>
-            </div>
+            <button class="btn-dub-launch" onclick="openDubbingModal(activeChunkIndex)">
+              <span>🎙️</span> Open Dubbing Booth
+            </button>
           </div>
         </div>
 
-        <!-- Full Scene Assembly Card -->
-        <div class="assembly-card" id="assemblyCard">
+        <!-- Assembly & Final Render Card -->
+        <div class="assembly-card">
           <div class="assembly-header">
             <div>
-              <h4>🎬 Full Scene Assembly</h4>
+              <h4>🎬 Final Scene Assembly</h4>
               <p id="dubProgressText">0 of 0 lines dubbed</p>
             </div>
             <button class="btn-assemble" id="assembleBtn" onclick="assembleFullMovie()" disabled>
@@ -1159,9 +1423,7 @@
         <div class="chunks-list" id="chunksList">
           <p style="color:var(--text-dim);font-size:13px;">Load a clip above to view dialogue segments.</p>
         </div>
-
       </div>
-
     </section>
 
     <!-- Bottom: Library Grid -->
@@ -1173,19 +1435,137 @@
     </section>
   </main>
 
+  <!-- ==========================================================================
+       DEDICATED DUBBING BOOTH MODAL (WITH TRIMMED VIDEO & REAL-TIME VOICE GRAPH)
+       ========================================================================== -->
+  <div class="dub-modal-backdrop" id="dubbingModal">
+    <div class="dub-modal-window">
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <span class="modal-badge" id="modalBadge">Line #1</span>
+          <span class="modal-time-range" id="modalTimeRange">00:00 - 00:03</span>
+        </div>
+        <button class="modal-close-btn" onclick="closeDubbingModal()" title="Close Booth (Esc)">✕</button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="modal-body">
+        <!-- Constrained Trimmed Video Viewport -->
+        <div class="modal-video-container">
+          <video id="modalVideo" playsinline></video>
+          <audio id="modalDubAudio" preload="auto"></audio>
+        </div>
+
+        <!-- Video Scene Preview Toggles -->
+        <div class="modal-video-controls">
+          <button class="btn-pill-mode active" id="modalTabOrig" onclick="setModalVideoMode('vocals')">
+            <span>👂 Original Actor</span>
+          </button>
+          <button class="btn-pill-mode" id="modalTabBgm" onclick="setModalVideoMode('instrumental')">
+            <span>🎵 Movie BGM / Karaoke</span>
+          </button>
+          <button class="btn-pill-mode" id="modalLoopBtn" onclick="toggleModalLoop()">
+            <span id="modalLoopIcon">🔁</span> Practice Loop: <span id="modalLoopStatus">Off</span>
+          </button>
+        </div>
+
+        <!-- Dialogue Script Teleprompter Card -->
+        <div class="modal-dialogue-card">
+          <div class="modal-dialogue-label">💬 Dialogue Line to Deliver</div>
+          <div class="modal-dialogue-text" id="modalPromptText">"Loading line..."</div>
+          <input type="text" class="modal-dialogue-input" id="modalPromptInput" 
+                 placeholder="Edit script / subtitle text..." 
+                 onchange="updateModalChunkText(this.value)" />
+        </div>
+
+        <!-- Real-Time Voice Oscilloscope Waveform Card -->
+        <div class="waveform-card">
+          <div class="waveform-header">
+            <span class="waveform-title">
+              <span>📊 Real-Time Voice Waveform</span>
+            </span>
+            <div class="mic-level-pill" id="micLevelPill">
+              <span class="mic-dot" id="micDot"></span>
+              <span id="micStatusText">Mic Standby</span>
+              <span id="micVolText" style="font-weight:700;color:#fff;">(0%)</span>
+            </div>
+          </div>
+
+          <div class="waveform-canvas-wrapper">
+            <canvas id="waveformCanvas"></canvas>
+          </div>
+
+          <div class="timing-hint">
+            <span>💡</span>
+            <span>Independent timing: Speak naturally at your pace! Leading and trailing dead silence will be automatically stripped.</span>
+          </div>
+        </div>
+
+        <!-- Dubbing Controls (Record / Done Speaking) -->
+        <div class="modal-record-controls" id="modalRecordControls">
+          <div class="record-timer-text" id="recordTimerText">⏱️ 00:00.0</div>
+          <button class="btn-record-main" id="btnRecordMain" onclick="toggleModalRecording()">
+            <span id="recordIcon">🔴</span>
+            <span id="recordBtnLabel">Start Dubbing Line</span>
+          </button>
+        </div>
+
+        <!-- Review & Alignment Panel (Shown after recording) -->
+        <div class="modal-review-panel" id="modalReviewPanel">
+          <div class="review-banner">
+            <span class="review-text-highlight">✨ Dub Captured & Aligned!</span>
+            <span class="silence-trimmed-badge" id="silenceTrimmedBadge">Trimmed 0.0s dead air</span>
+          </div>
+
+          <div class="review-btn-row">
+            <button class="btn-preview-dub" onclick="previewModalDub()">
+              <span>▶️</span> Listen with Scene BGM
+            </button>
+            <button class="btn-redo-line" onclick="redoModalDub()">
+              <span>🔄</span> Try Again
+            </button>
+            <button class="btn-save-line" onclick="saveAndCloseModal()">
+              <span>✅</span> Save Line
+            </button>
+            <button class="btn-save-line" id="btnNextLineModal" style="background:linear-gradient(135deg,#8b5cf6,#6366f1);" onclick="saveAndNextModal()">
+              <span>⏭️</span> Save & Next Line
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
   <script>
+    /* ==========================================================================
+       GLOBAL STATE & ELEMENT REFERENCES
+       ========================================================================== */
     let currentClip = null;
     let stemMode = 'full';
     let currentSegments = [];
     let activeChunkIndex = 0;
-    let isPracticeLooping = false;
-    let practiceInterval = null;
+
+    // Media Recorder & Web Audio state
+    let isRecording = false;
     let mediaRecorder = null;
     let recordedAudioChunks = [];
-    let isRecording = false;
-    let currentDubBlob = null;
-    let currentDubUrl = null;
+    let audioContext = null;
+    let analyserNode = null;
+    let micStream = null;
+    let animFrameId = null;
+    let recordStartTime = null;
+    let recordTimerInterval = null;
 
+    // Modal state
+    let modalChunk = null;
+    let modalVideoMode = 'vocals'; // 'vocals' or 'instrumental'
+    let isModalLooping = false;
+    let modalCheckInterval = null;
+    let lastUploadedDubInfo = null;
+
+    // Elements
     const mainVideo = document.getElementById('mainVideo');
     const userDubAudio = document.getElementById('userDubAudio');
     const emptyState = document.getElementById('emptyState');
@@ -1193,6 +1573,15 @@
     const chunkStudio = document.getElementById('chunkStudio');
     const teleprompter = document.getElementById('teleprompter');
 
+    const dubbingModal = document.getElementById('dubbingModal');
+    const modalVideo = document.getElementById('modalVideo');
+    const modalDubAudio = document.getElementById('modalDubAudio');
+    const waveformCanvas = document.getElementById('waveformCanvas');
+    const canvasCtx = waveformCanvas.getContext('2d');
+
+    /* ==========================================================================
+       PRESETS & CLIP PROCESSING
+       ========================================================================== */
     function applyPreset(url, start, end, name, lang, script) {
       document.getElementById('videoUrl').value = url;
       document.getElementById('startTime').value = start;
@@ -1288,7 +1677,6 @@
     }
 
     async function loadClip(clipId) {
-      stopPracticeLoop();
       try {
         const res = await fetch(`/api/clips/${clipId}`);
         if (!res.ok) return;
@@ -1301,37 +1689,16 @@
         chunkStudio.style.opacity = '1';
         chunkStudio.style.pointerEvents = 'all';
 
-        // Load original video with studio-quality audio
         mainVideo.src = `/media/${clipId}/video.mp4`;
         mainVideo.muted = false;
         mainVideo.controls = true;
         userDubAudio.src = '';
 
-        syncDubAudioWithVideo();
         setStemMode('full');
-
-        // Fetch dialogue segments
         await fetchSegments(clipId);
       } catch (e) {
         console.error('Failed to load clip:', e);
       }
-    }
-
-    function syncDubAudioWithVideo() {
-      mainVideo.onplay = () => {
-        if (userDubAudio.src && !userDubAudio.paused) {
-          userDubAudio.currentTime = mainVideo.currentTime;
-          userDubAudio.play().catch(() => {});
-        }
-      };
-
-      mainVideo.onpause = () => {
-        if (userDubAudio.src) userDubAudio.pause();
-      };
-
-      mainVideo.onseeked = () => {
-        if (userDubAudio.src) userDubAudio.currentTime = mainVideo.currentTime;
-      };
     }
 
     function setStemMode(mode) {
@@ -1343,7 +1710,6 @@
 
       const vocSlider = document.getElementById('vocSlider');
       const bgmSlider = document.getElementById('bgmSlider');
-
       const curTime = mainVideo.currentTime || 0;
       const isPlaying = !mainVideo.paused && !mainVideo.ended && mainVideo.readyState > 2;
 
@@ -1370,9 +1736,7 @@
         mainVideo.src = targetPath;
         mainVideo.currentTime = curTime;
         mainVideo.muted = false;
-        if (isPlaying) {
-          mainVideo.play().catch(() => {});
-        }
+        if (isPlaying) mainVideo.play().catch(() => {});
       }
     }
 
@@ -1392,7 +1756,9 @@
       }
     }
 
-    /* Dialogue Segments Management */
+    /* ==========================================================================
+       DIALOGUE SEGMENTS & MAIN VIEW
+       ========================================================================== */
     async function fetchSegments(clipId) {
       try {
         const res = await fetch(`/api/clips/${clipId}/segments`);
@@ -1465,8 +1831,8 @@
             <button class="btn-chunk-action" onclick="playChunkOnce(${idx})">
               <span>🎧</span> Practice
             </button>
-            <button class="btn-chunk-action" style="color:var(--accent-gold);" onclick="selectChunk(${idx})">
-              <span>🎙️</span> Select to Dub
+            <button class="btn-chunk-action" style="color:var(--accent-gold);font-weight:700;" onclick="openDubbingModal(${idx})">
+              <span>🎙️</span> Dub Line
             </button>
           </div>
         `;
@@ -1475,10 +1841,7 @@
     }
 
     function selectChunk(index) {
-      stopPracticeLoop();
       activeChunkIndex = index;
-      document.getElementById('chunkReviewBox').style.display = 'none';
-      document.getElementById('chunkActionRow').style.display = 'flex';
       renderSegmentsList();
       updateActiveChunkView();
     }
@@ -1498,7 +1861,6 @@
       const promptText = chunk.text ? `"${chunk.text}"` : `Line #${activeChunkIndex + 1} (No script text entered)`;
       document.getElementById('activePromptDisplay').innerText = promptText;
 
-      // Update teleprompter
       teleprompter.innerText = chunk.text || `Line #${activeChunkIndex + 1}`;
       teleprompter.classList.add('active');
     }
@@ -1544,6 +1906,7 @@
       renderSegmentsList();
       updateActiveChunkView();
       saveSegmentsToServer();
+      openDubbingModal(activeChunkIndex);
     }
 
     async function saveSegmentsToServer() {
@@ -1559,61 +1922,9 @@
       }
     }
 
-    /* Practice Loop Flow */
-    function togglePracticeLoop() {
-      if (isPracticeLooping) {
-        stopPracticeLoop();
-      } else {
-        startPracticeLoop();
-      }
-    }
-
-    function startPracticeLoop() {
-      if (!currentSegments[activeChunkIndex] || !currentClip) return;
+    function previewActiveChunkOriginal() {
+      if (!currentClip || !currentSegments[activeChunkIndex]) return;
       const chunk = currentSegments[activeChunkIndex];
-
-      isPracticeLooping = true;
-      document.getElementById('practiceBtn').classList.add('looping');
-      document.getElementById('practiceBtnIcon').innerText = '⏹️';
-      document.getElementById('practiceBtnText').innerText = 'Stop Practice Loop';
-
-      // Play isolated dialogue or original video so user hears the actor clearly
-      const targetSrc = `/media/${currentClip.id}/video_vocals.mp4`;
-      if (!mainVideo.src.endsWith(targetSrc)) {
-        mainVideo.src = targetSrc;
-      }
-
-      mainVideo.currentTime = chunk.start;
-      mainVideo.play().catch(() => {});
-
-      if (practiceInterval) clearInterval(practiceInterval);
-      practiceInterval = setInterval(() => {
-        if (!isPracticeLooping) return;
-        if (mainVideo.currentTime >= chunk.end || mainVideo.paused) {
-          mainVideo.currentTime = chunk.start;
-          mainVideo.play().catch(() => {});
-        }
-      }, 50);
-    }
-
-    function stopPracticeLoop() {
-      isPracticeLooping = false;
-      if (practiceInterval) clearInterval(practiceInterval);
-      practiceInterval = null;
-
-      const pBtn = document.getElementById('practiceBtn');
-      if (pBtn) {
-        pBtn.classList.remove('looping');
-        document.getElementById('practiceBtnIcon').innerText = '🔁';
-        document.getElementById('practiceBtnText').innerText = 'Practice Line (Loop Voice)';
-      }
-      if (mainVideo && !mainVideo.paused) mainVideo.pause();
-    }
-
-    function playChunkOnce(index) {
-      stopPracticeLoop();
-      selectChunk(index);
-      const chunk = currentSegments[index];
       const targetSrc = `/media/${currentClip.id}/video_vocals.mp4`;
       if (!mainVideo.src.endsWith(targetSrc)) mainVideo.src = targetSrc;
       mainVideo.currentTime = chunk.start;
@@ -1627,162 +1938,466 @@
       }, 50);
     }
 
-    /* Dub Line Recording Flow */
-    async function toggleChunkDubRecording() {
-      stopPracticeLoop();
-      if (isRecording) {
-        stopChunkDubRecording();
-        return;
+    function previewActiveChunkBgm() {
+      if (!currentClip || !currentSegments[activeChunkIndex]) return;
+      const chunk = currentSegments[activeChunkIndex];
+      const targetSrc = `/media/${currentClip.id}/video_instrumental.mp4`;
+      if (!mainVideo.src.endsWith(targetSrc)) mainVideo.src = targetSrc;
+      mainVideo.currentTime = chunk.start;
+      mainVideo.play().catch(() => {});
+
+      const checkStop = setInterval(() => {
+        if (mainVideo.currentTime >= chunk.end) {
+          mainVideo.pause();
+          clearInterval(checkStop);
+        }
+      }, 50);
+    }
+
+    function playChunkOnce(idx) {
+      selectChunk(idx);
+      previewActiveChunkOriginal();
+    }
+
+    /* ==========================================================================
+       DEDICATED DUBBING BOOTH MODAL & WAVEFORM ENGINE
+       ========================================================================== */
+    function openDubbingModal(index) {
+      if (!currentClip || !currentSegments[index]) return;
+      activeChunkIndex = index;
+      modalChunk = currentSegments[index];
+
+      // Pause main player
+      if (mainVideo && !mainVideo.paused) mainVideo.pause();
+
+      // Setup Modal Info
+      document.getElementById('modalBadge').innerText = `Line #${index + 1} of ${currentSegments.length}`;
+      document.getElementById('modalTimeRange').innerText = `${formatSec(modalChunk.start)} - ${formatSec(modalChunk.end)} (${(modalChunk.end - modalChunk.start).toFixed(1)}s window)`;
+      
+      const prompt = modalChunk.text || `Line #${index + 1} (No script text entered)`;
+      document.getElementById('modalPromptText').innerText = `"${prompt}"`;
+      document.getElementById('modalPromptInput').value = modalChunk.text || '';
+
+      // Reset modal state
+      isModalLooping = false;
+      document.getElementById('modalLoopStatus').innerText = 'Off';
+      document.getElementById('modalLoopBtn').classList.remove('active');
+
+      document.getElementById('modalReviewPanel').style.display = 'none';
+      document.getElementById('modalRecordControls').style.display = 'flex';
+      resetRecordBtnState();
+
+      // Show Next button if not last chunk
+      const nextBtn = document.getElementById('btnNextLineModal');
+      nextBtn.style.display = (index < currentSegments.length - 1) ? 'flex' : 'none';
+
+      // Load trimmed video in modal
+      setModalVideoMode('vocals');
+
+      // Setup & start resting waveform canvas
+      initWaveformCanvas();
+      drawRestingWaveform();
+
+      // Open Modal
+      dubbingModal.classList.add('open');
+    }
+
+    function closeDubbingModal() {
+      stopModalVideo();
+      if (isRecording) stopModalRecording();
+      stopWaveformVisualizer();
+      dubbingModal.classList.remove('open');
+      renderSegmentsList();
+      updateActiveChunkView();
+      updateAssemblyStatus();
+    }
+
+    // Keyboard support: Esc closes modal
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && dubbingModal.classList.contains('open')) {
+        closeDubbingModal();
+      }
+    });
+
+    function setModalVideoMode(mode) {
+      if (!currentClip || !modalChunk) return;
+      modalVideoMode = mode;
+
+      document.getElementById('modalTabOrig').classList.toggle('active', mode === 'vocals');
+      document.getElementById('modalTabBgm').classList.toggle('active', mode === 'instrumental');
+
+      const targetFile = (mode === 'vocals') ? 'video_vocals.mp4' : 'video_instrumental.mp4';
+      const targetPath = `/media/${currentClip.id}/${targetFile}`;
+
+      if (!modalVideo.src.endsWith(targetPath)) {
+        modalVideo.src = targetPath;
+      }
+      modalVideo.currentTime = modalChunk.start;
+      modalVideo.play().catch(() => {});
+
+      startModalVideoConstraint();
+    }
+
+    function toggleModalLoop() {
+      isModalLooping = !isModalLooping;
+      document.getElementById('modalLoopStatus').innerText = isModalLooping ? 'On' : 'Off';
+      document.getElementById('modalLoopBtn').classList.toggle('active', isModalLooping);
+
+      if (isModalLooping) {
+        modalVideo.currentTime = modalChunk.start;
+        modalVideo.play().catch(() => {});
+        startModalVideoConstraint();
+      }
+    }
+
+    function startModalVideoConstraint() {
+      if (modalCheckInterval) clearInterval(modalCheckInterval);
+      modalCheckInterval = setInterval(() => {
+        if (!modalChunk) {
+          clearInterval(modalCheckInterval);
+          return;
+        }
+
+        if (modalVideo.currentTime >= modalChunk.end) {
+          if (isModalLooping) {
+            modalVideo.currentTime = modalChunk.start;
+            modalVideo.play().catch(() => {});
+          } else {
+            modalVideo.pause();
+            modalVideo.currentTime = modalChunk.start;
+            clearInterval(modalCheckInterval);
+          }
+        }
+      }, 40);
+    }
+
+    function stopModalVideo() {
+      if (modalCheckInterval) clearInterval(modalCheckInterval);
+      if (modalVideo && !modalVideo.paused) modalVideo.pause();
+      if (modalDubAudio && !modalDubAudio.paused) modalDubAudio.pause();
+    }
+
+    function updateModalChunkText(newText) {
+      if (modalChunk) {
+        modalChunk.text = newText;
+        document.getElementById('modalPromptText').innerText = newText ? `"${newText}"` : `Line #${activeChunkIndex + 1}`;
+        currentSegments[activeChunkIndex].text = newText;
+        saveSegmentsToServer();
+      }
+    }
+
+    /* Waveform Canvas Drawing Engine */
+    function initWaveformCanvas() {
+      const rect = waveformCanvas.parentElement.getBoundingClientRect();
+      waveformCanvas.width = rect.width * (window.devicePixelRatio || 1);
+      waveformCanvas.height = 90 * (window.devicePixelRatio || 1);
+      canvasCtx.scale(window.devicePixelRatio || 1, window.devicePixelRatio || 1);
+    }
+
+    function drawRestingWaveform() {
+      if (isRecording) return;
+      const width = waveformCanvas.width / (window.devicePixelRatio || 1);
+      const height = 90;
+
+      canvasCtx.clearRect(0, 0, width, height);
+
+      // Subtle ambient neon resting pulse
+      const t = Date.now() * 0.003;
+      canvasCtx.beginPath();
+      canvasCtx.moveTo(0, height / 2);
+
+      const grad = canvasCtx.createLinearGradient(0, 0, width, 0);
+      grad.addColorStop(0, '#f59e0b');
+      grad.addColorStop(0.5, '#06b6d4');
+      grad.addColorStop(1, '#8b5cf6');
+
+      canvasCtx.strokeStyle = grad;
+      canvasCtx.lineWidth = 2;
+      canvasCtx.shadowBlur = 8;
+      canvasCtx.shadowColor = 'rgba(245, 158, 11, 0.4)';
+
+      for (let x = 0; x < width; x += 4) {
+        const y = (height / 2) + Math.sin(x * 0.04 + t) * 3;
+        canvasCtx.lineTo(x, y);
+      }
+      canvasCtx.stroke();
+      canvasCtx.shadowBlur = 0;
+
+      if (!isRecording && dubbingModal.classList.contains('open')) {
+        animFrameId = requestAnimationFrame(drawRestingWaveform);
+      }
+    }
+
+    async function startWaveformVisualizer(stream) {
+      if (animFrameId) cancelAnimationFrame(animFrameId);
+
+      if (!audioContext) {
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      if (audioContext.state === 'suspended') {
+        await audioContext.resume();
       }
 
+      analyserNode = audioContext.createAnalyser();
+      analyserNode.fftSize = 1024;
+      analyserNode.smoothingTimeConstant = 0.8;
+
+      const source = audioContext.createMediaStreamSource(stream);
+      source.connect(analyserNode);
+
+      const bufferLength = analyserNode.frequencyBinCount;
+      const dataArray = new Uint8Array(bufferLength);
+
+      const width = waveformCanvas.width / (window.devicePixelRatio || 1);
+      const height = 90;
+
+      document.getElementById('micLevelPill').classList.add('active');
+      document.getElementById('micDot').classList.add('live');
+      document.getElementById('micStatusText').innerText = 'Mic Active';
+
+      function renderFrame() {
+        if (!isRecording) return;
+        animFrameId = requestAnimationFrame(renderFrame);
+
+        analyserNode.getByteTimeDomainData(dataArray);
+
+        canvasCtx.clearRect(0, 0, width, height);
+
+        // Compute peak / RMS volume for badge
+        let sumSquares = 0;
+        for (let i = 0; i < bufferLength; i++) {
+          const norm = (dataArray[i] - 128) / 128;
+          sumSquares += norm * norm;
+        }
+        const rms = Math.sqrt(sumSquares / bufferLength);
+        const volPct = Math.min(100, Math.round(rms * 280));
+        document.getElementById('micVolText').innerText = `(${volPct}%)`;
+
+        // Draw glowing oscilloscope wave
+        canvasCtx.beginPath();
+        const sliceWidth = width / bufferLength;
+        let x = 0;
+
+        const grad = canvasCtx.createLinearGradient(0, 0, width, 0);
+        grad.addColorStop(0, '#f59e0b');
+        grad.addColorStop(0.4, '#06b6d4');
+        grad.addColorStop(0.8, '#a855f7');
+        grad.addColorStop(1, '#ef4444');
+
+        canvasCtx.strokeStyle = grad;
+        canvasCtx.lineWidth = 3;
+        canvasCtx.shadowBlur = Math.max(6, volPct * 0.35);
+        canvasCtx.shadowColor = '#f59e0b';
+
+        for (let i = 0; i < bufferLength; i++) {
+          const v = dataArray[i] / 128.0;
+          const y = (v * height) / 2;
+
+          if (i === 0) {
+            canvasCtx.moveTo(x, y);
+          } else {
+            canvasCtx.lineTo(x, y);
+          }
+          x += sliceWidth;
+        }
+
+        canvasCtx.lineTo(width, height / 2);
+        canvasCtx.stroke();
+        canvasCtx.shadowBlur = 0;
+      }
+
+      renderFrame();
+    }
+
+    function stopWaveformVisualizer() {
+      if (animFrameId) cancelAnimationFrame(animFrameId);
+      document.getElementById('micLevelPill').classList.remove('active');
+      document.getElementById('micDot').classList.remove('live');
+      document.getElementById('micStatusText').innerText = 'Mic Standby';
+      document.getElementById('micVolText').innerText = '(0%)';
+    }
+
+    /* Modal Recording Logic (Independent Timing + Real-Time Feedback) */
+    async function toggleModalRecording() {
+      if (isRecording) {
+        stopModalRecording();
+      } else {
+        startModalRecording();
+      }
+    }
+
+    async function startModalRecording() {
       try {
-        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-        startChunkCountdownAndRecord(stream);
+        micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        isRecording = true;
+        recordedAudioChunks = [];
+
+        mediaRecorder = new MediaRecorder(micStream);
+        mediaRecorder.ondataavailable = e => {
+          if (e.data.size > 0) recordedAudioChunks.push(e.data);
+        };
+
+        mediaRecorder.onstop = () => {
+          handleRecordingFinished();
+        };
+
+        mediaRecorder.start();
+
+        // UI state update
+        const recBtn = document.getElementById('btnRecordMain');
+        recBtn.classList.add('recording');
+        document.getElementById('recordIcon').innerText = '⏹️';
+        document.getElementById('recordBtnLabel').innerText = 'Done Speaking (Finish Dub)';
+
+        const timerText = document.getElementById('recordTimerText');
+        timerText.style.display = 'block';
+        recordStartTime = Date.now();
+        recordTimerInterval = setInterval(() => {
+          const elapsed = (Date.now() - recordStartTime) / 1000;
+          timerText.innerText = `⏱️ Recording: ${elapsed.toFixed(1)}s (Take your time)`;
+        }, 100);
+
+        // Start waveform visualizer
+        await startWaveformVisualizer(micStream);
+
+        // Play instrumental video starting at chunk start so user can speak along
+        const targetSrc = `/media/${currentClip.id}/video_instrumental.mp4`;
+        if (!modalVideo.src.endsWith(targetSrc)) modalVideo.src = targetSrc;
+        modalVideo.currentTime = modalChunk.start;
+        modalVideo.play().catch(() => {});
+
+        // Independent timing: video can pause after chunk.end while user finishes naturally
+        const autoVideoStop = setInterval(() => {
+          if (!isRecording) {
+            clearInterval(autoVideoStop);
+            return;
+          }
+          if (modalVideo.currentTime >= modalChunk.end) {
+            modalVideo.pause();
+            clearInterval(autoVideoStop);
+          }
+        }, 50);
+
       } catch (err) {
         alert('Could not access microphone: ' + err.message);
       }
     }
 
-    function startChunkCountdownAndRecord(stream) {
-      const countdownOverlay = document.getElementById('countdownOverlay');
-      const countdownNum = document.getElementById('countdownNum');
-      countdownOverlay.style.display = 'flex';
-
-      let count = 3;
-      countdownNum.innerText = count;
-
-      const timer = setInterval(() => {
-        count--;
-        if (count > 0) {
-          countdownNum.innerText = count;
-        } else {
-          clearInterval(timer);
-          countdownOverlay.style.display = 'none';
-          beginChunkDub(stream);
-        }
-      }, 850);
-    }
-
-    function beginChunkDub(stream) {
-      if (!currentSegments[activeChunkIndex] || !currentClip) return;
-      const chunk = currentSegments[activeChunkIndex];
-
-      isRecording = true;
-      recordedAudioChunks = [];
-      mediaRecorder = new MediaRecorder(stream);
-
-      mediaRecorder.ondataavailable = e => {
-        if (e.data.size > 0) recordedAudioChunks.push(e.data);
-      };
-
-      mediaRecorder.onstop = () => {
-        currentDubBlob = new Blob(recordedAudioChunks, { type: 'audio/webm' });
-        currentDubUrl = URL.createObjectURL(currentDubBlob);
-        userDubAudio.src = currentDubUrl;
-
-        // Show review box
-        document.getElementById('chunkActionRow').style.display = 'none';
-        document.getElementById('chunkReviewBox').style.display = 'flex';
-        previewChunkDub();
-      };
-
-      mediaRecorder.start();
-
-      // Play BGM track only for the chunk
-      const targetSrc = `/media/${currentClip.id}/video_instrumental.mp4`;
-      if (!mainVideo.src.endsWith(targetSrc)) mainVideo.src = targetSrc;
-      mainVideo.currentTime = chunk.start;
-      mainVideo.play().catch(() => {});
-
-      document.getElementById('recordChunkBtn').classList.add('recording');
-      document.getElementById('recordChunkBtnText').innerText = 'Recording Line...';
-
-      // Auto-stop at chunk.end
-      const autoStopInterval = setInterval(() => {
-        if (!isRecording) {
-          clearInterval(autoStopInterval);
-          return;
-        }
-        if (mainVideo.currentTime >= chunk.end) {
-          stopChunkDubRecording();
-          clearInterval(autoStopInterval);
-        }
-      }, 40);
-    }
-
-    function stopChunkDubRecording() {
-      if (mediaRecorder && isRecording) {
-        mediaRecorder.stop();
-        mediaRecorder.stream.getTracks().forEach(t => t.stop());
-      }
+    function stopModalRecording() {
+      if (!isRecording) return;
       isRecording = false;
-      document.getElementById('recordChunkBtn').classList.remove('recording');
-      document.getElementById('recordChunkBtnText').innerText = 'Dub This Line';
-      if (mainVideo && !mainVideo.paused) mainVideo.pause();
-    }
 
-    /* Review & Approval */
-    function previewChunkDub() {
-      if (!currentSegments[activeChunkIndex] || !currentClip) return;
-      const chunk = currentSegments[activeChunkIndex];
+      if (recordTimerInterval) clearInterval(recordTimerInterval);
+      document.getElementById('recordTimerText').style.display = 'none';
 
-      // Play video with instrumental BGM, plus user's recorded audio
-      const targetSrc = `/media/${currentClip.id}/video_instrumental.mp4`;
-      if (!mainVideo.src.endsWith(targetSrc)) mainVideo.src = targetSrc;
-      mainVideo.currentTime = chunk.start;
-      if (userDubAudio.src) {
-        userDubAudio.currentTime = 0;
-        userDubAudio.play().catch(() => {});
+      if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+        mediaRecorder.stop();
       }
-      mainVideo.play().catch(() => {});
+      if (micStream) {
+        micStream.getTracks().forEach(t => t.stop());
+      }
 
-      const checkEnd = setInterval(() => {
-        if (mainVideo.currentTime >= chunk.end || mainVideo.paused) {
-          mainVideo.pause();
-          if (userDubAudio) userDubAudio.pause();
-          clearInterval(checkEnd);
-        }
-      }, 50);
+      stopWaveformVisualizer();
+      stopModalVideo();
+      resetRecordBtnState();
+      drawRestingWaveform();
     }
 
-    function retryChunkDub() {
-      document.getElementById('chunkReviewBox').style.display = 'none';
-      document.getElementById('chunkActionRow').style.display = 'flex';
-      toggleChunkDubRecording();
+    function resetRecordBtnState() {
+      const recBtn = document.getElementById('btnRecordMain');
+      recBtn.classList.remove('recording');
+      document.getElementById('recordIcon').innerText = '🔴';
+      document.getElementById('recordBtnLabel').innerText = 'Start Dubbing Line';
     }
 
-    async function acceptChunkDub() {
-      if (!currentSegments[activeChunkIndex] || !currentClip || !currentDubBlob) return;
-      const chunk = currentSegments[activeChunkIndex];
+    async function handleRecordingFinished() {
+      const blob = new Blob(recordedAudioChunks, { type: 'audio/webm' });
+      document.getElementById('recordBtnLabel').innerText = 'Trimming Silence & Aligning...';
 
+      // Send to backend for automatic silence stripping & alignment
       const formData = new FormData();
-      formData.append('chunk_id', chunk.id);
-      formData.append('file', currentDubBlob, `${chunk.id}.webm`);
+      formData.append('chunk_id', modalChunk.id);
+      formData.append('file', blob, `${modalChunk.id}.webm`);
 
       try {
         const res = await fetch(`/api/clips/${currentClip.id}/dub-chunk`, {
           method: 'POST',
           body: formData
         });
-        if (!res.ok) throw new Error('Failed to upload chunk dub');
 
-        chunk.dubbed = true;
-        renderSegmentsList();
-        updateAssemblyStatus();
+        if (!res.ok) throw new Error('Failed to upload and process dub');
+        const data = await res.json();
+        lastUploadedDubInfo = data;
 
-        // Advance to next chunk if exists
-        if (activeChunkIndex < currentSegments.length - 1) {
-          selectChunk(activeChunkIndex + 1);
-        } else {
-          document.getElementById('chunkReviewBox').style.display = 'none';
-          document.getElementById('chunkActionRow').style.display = 'flex';
-          alert('🎉 All dialogue lines dubbed! Click "Assemble Full Movie Dub" to watch the full scene!');
-        }
+        modalChunk.dubbed = true;
+
+        // Setup audio element with trimmed audio
+        modalDubAudio.src = data.audio_url + '?t=' + Date.now();
+
+        // Update Review Stage
+        const leadCut = data.trim_info ? data.trim_info.lead_silence_stripped.toFixed(2) : '0.0';
+        const trimDur = data.trim_info ? data.trim_info.trimmed_duration.toFixed(2) : '0.0';
+        document.getElementById('silenceTrimmedBadge').innerText = `✨ Auto-trimmed ${leadCut}s dead air (Speech: ${trimDur}s)`;
+
+        document.getElementById('modalRecordControls').style.display = 'none';
+        document.getElementById('modalReviewPanel').style.display = 'flex';
+
+        // Auto preview immediately so user gets instant gratification!
+        previewModalDub();
       } catch (err) {
         alert('Error saving dub: ' + err.message);
+        resetRecordBtnState();
       }
     }
 
+    function previewModalDub() {
+      if (!modalChunk || !modalDubAudio.src) return;
+
+      // Play video with instrumental BGM, aligned at chunk.start with trimmed user dub
+      const targetSrc = `/media/${currentClip.id}/video_instrumental.mp4`;
+      if (!modalVideo.src.endsWith(targetSrc)) modalVideo.src = targetSrc;
+      
+      modalVideo.currentTime = modalChunk.start;
+      modalDubAudio.currentTime = 0;
+
+      modalVideo.play().catch(() => {});
+      modalDubAudio.play().catch(() => {});
+
+      const checkEnd = setInterval(() => {
+        if (modalDubAudio.ended || modalVideo.currentTime >= modalChunk.end + 2.0) {
+          modalVideo.pause();
+          modalDubAudio.pause();
+          clearInterval(checkEnd);
+        }
+      }, 50);
+    }
+
+    function redoModalDub() {
+      stopModalVideo();
+      document.getElementById('modalReviewPanel').style.display = 'none';
+      document.getElementById('modalRecordControls').style.display = 'flex';
+      resetRecordBtnState();
+      drawRestingWaveform();
+      startModalRecording();
+    }
+
+    function saveAndCloseModal() {
+      closeDubbingModal();
+    }
+
+    function saveAndNextModal() {
+      stopModalVideo();
+      if (activeChunkIndex < currentSegments.length - 1) {
+        openDubbingModal(activeChunkIndex + 1);
+      } else {
+        closeDubbingModal();
+        alert('🎉 All dialogue lines dubbed! Click "Assemble Full Movie Dub" to watch the full scene!');
+      }
+    }
+
+    /* ==========================================================================
+       ASSEMBLY & FINAL VIDEO
+       ========================================================================== */
     function updateAssemblyStatus() {
       const dubbedCount = currentSegments.filter(s => s.dubbed).length;
       const total = currentSegments.length;
@@ -1795,7 +2410,6 @@
       assembleBtn.disabled = dubbedCount === 0;
     }
 
-    /* Assembly */
     async function assembleFullMovie() {
       if (!currentClip) return;
       const btn = document.getElementById('assembleBtn');
@@ -1818,7 +2432,7 @@
         const downloadLink = document.getElementById('downloadDubLink');
         downloadLink.href = data.video_url;
 
-        // Play the final assembled video directly!
+        // Play final dubbed movie
         mainVideo.src = data.video_url + '?t=' + Date.now();
         mainVideo.currentTime = 0;
         mainVideo.muted = false;
@@ -1840,12 +2454,13 @@
     }
 
     function formatSec(seconds) {
+      if (isNaN(seconds)) return '00:00';
       const mins = Math.floor(seconds / 60);
       const secs = (seconds % 60).toFixed(1);
       return `${mins.toString().padStart(2, '0')}:${secs < 10 ? '0' : ''}${secs}`;
     }
 
-    // Initial load
+    // Initialize Library on page load
     loadLibrary();
   </script>
 </body>

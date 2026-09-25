@@ -10,7 +10,7 @@ from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
-from src.assembler import assemble_full_dub
+from src.assembler import assemble_full_dub, process_and_trim_chunk
 from src.downloader import download_youtube_clip
 from src.segmenter import get_or_create_segments, save_segments
 from src.separator import separate_audio_stems
@@ -48,7 +48,6 @@ def process_clip(req: ProcessRequest):
     """Downloads a YouTube segment and separates vocals from BGM."""
     try:
         logger.info(f"Processing URL: {req.url} ({req.start_time} -> {req.end_time})")
-        # Step 1: Download
         info = download_youtube_clip(
             url=req.url,
             output_dir=DATA_DIR,
@@ -58,7 +57,6 @@ def process_clip(req: ProcessRequest):
         )
         clip_dir = Path(info["video_path"]).parent
 
-        # Add language and dialogue script to info if provided
         info_path = clip_dir / "info.json"
         if req.language or req.dialogue_script:
             with open(info_path, "r", encoding="utf-8") as f:
@@ -68,7 +66,6 @@ def process_clip(req: ProcessRequest):
             with open(info_path, "w", encoding="utf-8") as f:
                 json.dump(current_info, f, indent=2)
 
-        # Step 2: Separate
         result = separate_audio_stems(clip_dir=clip_dir)
         return {
             "status": "success",
@@ -93,10 +90,10 @@ def list_clips():
                         data = json.load(f)
                         data["id"] = clip_folder.name
                         data["has_stems"] = (clip_folder / "vocals.wav").exists() and (clip_folder / "instrumental.wav").exists()
+                        data["has_final_dub"] = (clip_folder / "video_dubbed_final.mp4").exists()
                         clips.append(data)
                 except Exception as e:
                     logger.warning(f"Failed to read {info_file}: {e}")
-    # Sort clips by id or creation
     return {"clips": clips}
 
 
@@ -149,7 +146,7 @@ async def upload_dub_chunk(
     chunk_id: str = Form(...),
     file: UploadFile = File(...)
 ):
-    """Saves a user's recorded audio for a specific dialogue chunk."""
+    """Saves user's recorded audio, strips silence, and stores clean WAV."""
     clip_folder = DATA_DIR / clip_id
     if not clip_folder.exists():
         raise HTTPException(status_code=404, detail="Clip not found")
@@ -157,9 +154,16 @@ async def upload_dub_chunk(
     dubs_dir = clip_folder / "dubs"
     dubs_dir.mkdir(parents=True, exist_ok=True)
 
-    target_path = dubs_dir / f"{chunk_id}.webm"
-    with open(target_path, "wb") as buffer:
+    raw_path = dubs_dir / f"{chunk_id}_raw.webm"
+    with open(raw_path, "wb") as buffer:
         shutil.copyfileobj(file.file, buffer)
+
+    wav_path = dubs_dir / f"{chunk_id}.wav"
+    trim_info = process_and_trim_chunk(raw_path, wav_path)
+
+    # Keep webm copy
+    webm_path = dubs_dir / f"{chunk_id}.webm"
+    shutil.copy2(raw_path, webm_path)
 
     segments_file = clip_folder / "segments.json"
     if segments_file.exists():
@@ -168,11 +172,18 @@ async def upload_dub_chunk(
         for seg in segments:
             if seg["id"] == chunk_id:
                 seg["dubbed"] = True
+                seg["dub_duration"] = round(trim_info["trimmed_duration"], 2)
                 break
         with open(segments_file, "w", encoding="utf-8") as f:
             json.dump(segments, f, indent=2)
 
-    return {"status": "success", "chunk_id": chunk_id, "file_path": str(target_path)}
+    return {
+        "status": "success",
+        "chunk_id": chunk_id,
+        "file_path": str(wav_path),
+        "audio_url": f"/media/{clip_id}/dubs/{chunk_id}.wav",
+        "trim_info": trim_info
+    }
 
 
 @app.post("/api/clips/{clip_id}/assemble")
@@ -191,12 +202,12 @@ def assemble_clip_dub(clip_id: str):
         raise HTTPException(status_code=500, detail=str(e))
 
 
-# Mount media folder for streaming
 app.mount("/media", StaticFiles(directory=str(DATA_DIR)), name="media")
 
-# Mount static web app
+
 @app.get("/")
 def serve_index():
     return FileResponse(STATIC_DIR / "index.html")
+
 
 app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")

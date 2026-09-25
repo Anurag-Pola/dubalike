@@ -2,7 +2,7 @@ import json
 import logging
 import subprocess
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Tuple
 import numpy as np
 import soundfile as sf
 
@@ -22,6 +22,106 @@ def convert_to_wav(input_path: Path, output_wav_path: Path, sample_rate: int = 4
         str(output_wav_path)
     ]
     subprocess.run(cmd, capture_output=True, check=True)
+
+
+def trim_silence_from_audio(
+    audio_data: np.ndarray,
+    sr: int = 44100,
+    pad_sec: float = 0.06,
+    energy_thresh_ratio: float = 0.07,
+    min_energy_thresh: float = 0.012
+) -> Tuple[np.ndarray, float, float]:
+    """
+    Detects speech onset and offset via RMS energy envelope and strips leading & trailing dead air.
+    Returns (trimmed_audio_data, start_offset_seconds, end_offset_seconds).
+    """
+    if audio_data.size == 0:
+        return audio_data, 0.0, 0.0
+
+    # Calculate mono envelope
+    mono = np.mean(np.abs(audio_data), axis=1) if audio_data.ndim > 1 else np.abs(audio_data)
+    peak = np.max(mono)
+    total_duration = len(audio_data) / sr
+
+    if peak < 0.005:
+        # Audio is completely silent
+        return audio_data, 0.0, total_duration
+
+    frame_len = int(sr * 0.02)  # 20ms frame
+    n_frames = len(mono) // frame_len
+    if n_frames == 0:
+        return audio_data, 0.0, total_duration
+
+    reshaped = mono[:n_frames * frame_len].reshape(n_frames, frame_len)
+    rms = np.sqrt(np.mean(reshaped ** 2, axis=1))
+    peak_rms = np.max(rms)
+
+    thresh = max(min_energy_thresh, peak_rms * energy_thresh_ratio)
+    speech_indices = np.where(rms > thresh)[0]
+
+    if len(speech_indices) == 0:
+        return audio_data, 0.0, total_duration
+
+    first_idx = speech_indices[0]
+    last_idx = speech_indices[-1]
+    pad_samples = int(pad_sec * sr)
+
+    start_samp = max(0, first_idx * frame_len - pad_samples)
+    end_samp = min(len(audio_data), (last_idx + 1) * frame_len + pad_samples)
+
+    trimmed = audio_data[start_samp:end_samp].copy()
+
+    # Subtle 5ms fade-in and fade-out to prevent clicks
+    fade_len = min(int(0.005 * sr), len(trimmed) // 4)
+    if fade_len > 0:
+        fade_in = np.linspace(0.0, 1.0, fade_len)
+        fade_out = np.linspace(1.0, 0.0, fade_len)
+        if trimmed.ndim == 2:
+            trimmed[:fade_len] *= fade_in[:, None]
+            trimmed[-fade_len:] *= fade_out[:, None]
+        else:
+            trimmed[:fade_len] *= fade_in
+            trimmed[-fade_len:] *= fade_out
+
+    start_sec = start_samp / sr
+    end_sec = end_samp / sr
+    return trimmed, start_sec, end_sec
+
+
+def process_and_trim_chunk(
+    input_path: Path,
+    output_wav_path: Path,
+    sample_rate: int = 44100
+) -> Dict[str, Any]:
+    """
+    Takes an uploaded dub (e.g. webm), converts it to WAV, strips leading and trailing silence,
+    and writes out the clean WAV file.
+    """
+    temp_wav = output_wav_path.parent / f"temp_{output_wav_path.name}"
+    convert_to_wav(input_path, temp_wav, sample_rate=sample_rate)
+
+    audio_data, sr = sf.read(str(temp_wav))
+    if audio_data.ndim == 1:
+        audio_data = np.stack([audio_data, audio_data], axis=1)
+
+    orig_dur = len(audio_data) / sr
+    trimmed_data, lead_cut, trail_cut = trim_silence_from_audio(audio_data, sr=sr)
+    trimmed_dur = len(trimmed_data) / sr
+
+    sf.write(str(output_wav_path), trimmed_data, sr)
+    temp_wav.unlink(missing_ok=True)
+
+    logger.info(
+        f"Processed dub chunk: original={orig_dur:.2f}s -> trimmed={trimmed_dur:.2f}s "
+        f"(trimmed {lead_cut:.2f}s lead, {orig_dur - trail_cut:.2f}s trail)"
+    )
+
+    return {
+        "original_duration": orig_dur,
+        "trimmed_duration": trimmed_dur,
+        "lead_silence_stripped": lead_cut,
+        "wav_path": str(output_wav_path)
+    }
 
 
 def assemble_full_dub(clip_dir: Path) -> Dict[str, Any]:
@@ -56,7 +156,6 @@ def assemble_full_dub(clip_dir: Path) -> Dict[str, Any]:
     dubbed_count = 0
     for seg in segments:
         chunk_id = seg["id"]
-        # Look for chunk audio in dubs_dir (wav or webm)
         chunk_wav = dubs_dir / f"{chunk_id}.wav"
         chunk_webm = dubs_dir / f"{chunk_id}.webm"
 
@@ -64,14 +163,13 @@ def assemble_full_dub(clip_dir: Path) -> Dict[str, Any]:
         if chunk_wav.exists():
             target_chunk_audio = chunk_wav
         elif chunk_webm.exists():
-            # Convert webm to wav
-            convert_to_wav(chunk_webm, chunk_wav, sample_rate=sr)
+            # Process & trim webm to wav
+            process_and_trim_chunk(chunk_webm, chunk_wav, sample_rate=sr)
             target_chunk_audio = chunk_wav
 
         if target_chunk_audio and target_chunk_audio.exists():
             chunk_data, chunk_sr = sf.read(str(target_chunk_audio))
             if chunk_sr != sr:
-                # Resample or convert via ffmpeg
                 temp_resampled = dubs_dir / f"{chunk_id}_resampled.wav"
                 convert_to_wav(target_chunk_audio, temp_resampled, sample_rate=sr)
                 chunk_data, _ = sf.read(str(temp_resampled))
@@ -80,12 +178,17 @@ def assemble_full_dub(clip_dir: Path) -> Dict[str, Any]:
             if chunk_data.ndim == 1:
                 chunk_data = np.stack([chunk_data, chunk_data], axis=1)
 
+            # Optional pass of silence trimming if not already trimmed
+            chunk_trimmed, _, _ = trim_silence_from_audio(chunk_data, sr=sr)
+            if len(chunk_trimmed) > 0:
+                chunk_data = chunk_trimmed
+
             start_sample = int(seg["start"] * sr)
             end_sample = min(total_samples, start_sample + len(chunk_data))
             chunk_len = end_sample - start_sample
 
             if chunk_len > 0:
-                # Add chunk to dub track with slight gain boost for vocal prominence
+                # Add chunk to dub track with slight gain boost for vocal clarity
                 dub_track[start_sample:end_sample] += chunk_data[:chunk_len] * 1.15
                 dubbed_count += 1
                 seg["dubbed"] = True
