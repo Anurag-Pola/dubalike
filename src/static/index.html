@@ -1743,8 +1743,9 @@
             </div>
           </div>
 
-          <div class="waveform-canvas-wrapper">
+          <div class="waveform-canvas-wrapper" style="cursor:pointer;" id="waveformWrapper" title="Click anywhere on waveform to seek audio">
             <canvas id="waveformCanvas"></canvas>
+            <div id="playheadTimeTooltip" style="position:absolute;bottom:4px;right:10px;font-size:11px;color:#94a3b8;font-weight:600;font-variant-numeric:tabular-nums;pointer-events:none;"></div>
           </div>
 
           <div class="timing-hint">
@@ -2462,7 +2463,17 @@
       // Setup waveform canvas after DOM layout
       requestAnimationFrame(() => {
         updateWaveformCanvasSize();
-        drawRestingWaveform();
+        if (modalChunk && modalChunk.dubbed) {
+          isReviewingDub = true;
+          const dubbedUrl = `/media/${currentClip.id}/dubs/${modalChunk.id}.wav?t=` + Date.now();
+          modalDubAudio.src = dubbedUrl;
+          loadTrimmedAudioWaveform(dubbedUrl);
+          document.getElementById('modalRecordControls').style.display = 'none';
+          document.getElementById('modalReviewPanel').style.display = 'flex';
+        } else {
+          isReviewingDub = false;
+          drawRestingWaveform();
+        }
       });
     }
 
@@ -2559,8 +2570,14 @@
       }
     }
 
-    /* Waveform Canvas Drawing Engine */
+    /* ==========================================================================
+       GOOGLE PIXEL RECORDER STYLE WAVEFORM TIMELINE & PLAYHEAD ENGINE
+       ========================================================================== */
     let audioSourceNode = null;
+    let recordedWaveformPeaks = []; // Stores normalized speech peaks [0.05 .. 1.0]
+    let isWaveformRecording = false;
+    let isReviewingDub = false;
+    let playbackRenderLoopId = null;
 
     function updateWaveformCanvasSize() {
       const wrapper = waveformCanvas.parentElement;
@@ -2585,7 +2602,7 @@
     }
 
     function drawRestingWaveform() {
-      if (isRecording) return;
+      if (isWaveformRecording || isReviewingDub) return;
       if (!dubbingModal.classList.contains("open")) return;
 
       const wrapper = waveformCanvas.parentElement;
@@ -2616,13 +2633,14 @@
       canvasCtx.stroke();
       canvasCtx.shadowBlur = 0;
 
-      if (!isRecording && dubbingModal.classList.contains("open")) {
+      if (!isWaveformRecording && !isReviewingDub && dubbingModal.classList.contains("open")) {
         animFrameId = requestAnimationFrame(drawRestingWaveform);
       }
     }
 
     async function startWaveformVisualizer(stream) {
       if (animFrameId) cancelAnimationFrame(animFrameId);
+      if (playbackRenderLoopId) cancelAnimationFrame(playbackRenderLoopId);
 
       if (!audioContext || audioContext.state === "closed") {
         audioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -2643,13 +2661,19 @@
 
       document.getElementById("micLevelPill").classList.add("active");
       document.getElementById("micDot").classList.add("live");
-      document.getElementById("micStatusText").innerText = "Mic Live";
+      document.getElementById("micStatusText").innerText = "Recording Line";
 
       updateWaveformCanvasSize();
 
-      function renderFrame() {
-        if (!isRecording) return;
-        animFrameId = requestAnimationFrame(renderFrame);
+      recordedWaveformPeaks = [];
+      isWaveformRecording = true;
+      isReviewingDub = false;
+
+      let lastSampleTime = 0;
+
+      function renderRecordingFrame(timestamp) {
+        if (!isWaveformRecording) return;
+        animFrameId = requestAnimationFrame(renderRecordingFrame);
 
         analyserNode.getByteTimeDomainData(timeData);
 
@@ -2657,59 +2681,76 @@
         const width = wrapper ? wrapper.clientWidth : 700;
         const height = 90;
 
+        if (!lastSampleTime || timestamp - lastSampleTime >= 35) {
+          lastSampleTime = timestamp;
+          let sumSquares = 0;
+          for (let i = 0; i < bufferLength; i++) {
+            const norm = (timeData[i] - 128) / 128.0;
+            sumSquares += norm * norm;
+          }
+          const rms = Math.sqrt(sumSquares / bufferLength);
+          const amp = Math.min(1.0, Math.max(0.06, rms * 4.8));
+          recordedWaveformPeaks.push(amp);
+
+          const volPct = Math.min(100, Math.round(rms * 450));
+          document.getElementById("micVolText").innerText = `(${volPct}%)`;
+        }
+
         canvasCtx.clearRect(0, 0, width, height);
 
-        // Compute RMS volume for meter badge
-        let sumSquares = 0;
-        for (let i = 0; i < bufferLength; i++) {
-          const norm = (timeData[i] - 128) / 128.0;
-          sumSquares += norm * norm;
-        }
-        const rms = Math.sqrt(sumSquares / bufferLength);
-        const volPct = Math.min(100, Math.round(rms * 450));
-        document.getElementById("micVolText").innerText = `(${volPct}%)`;
+        const barWidth = 3.5;
+        const barGap = 2.5;
+        const slotWidth = barWidth + barGap;
+        const maxVisibleBars = Math.floor(width / slotWidth);
 
-        // Render amplified glowing voice waveform
-        canvasCtx.beginPath();
-        const sliceWidth = width / bufferLength;
-        let x = 0;
+        const totalPoints = recordedWaveformPeaks.length;
+        const startIdx = Math.max(0, totalPoints - maxVisibleBars);
+        const visibleSlice = recordedWaveformPeaks.slice(startIdx);
 
-        const grad = canvasCtx.createLinearGradient(0, 0, width, 0);
-        grad.addColorStop(0, "#f59e0b");
-        grad.addColorStop(0.35, "#06b6d4");
-        grad.addColorStop(0.75, "#a855f7");
-        grad.addColorStop(1, "#ef4444");
+        for (let i = 0; i < visibleSlice.length; i++) {
+          const amp = visibleSlice[i];
+          const x = i * slotWidth;
+          const barHeight = Math.max(4, amp * (height * 0.88));
+          const y = (height - barHeight) / 2;
 
-        canvasCtx.strokeStyle = grad;
-        canvasCtx.lineWidth = 3;
-        canvasCtx.shadowBlur = Math.max(6, Math.min(24, volPct * 0.4));
-        canvasCtx.shadowColor = "#f59e0b";
+          const grad = canvasCtx.createLinearGradient(0, y, 0, y + barHeight);
+          grad.addColorStop(0, "#f59e0b");
+          grad.addColorStop(0.5, "#fbbf24");
+          grad.addColorStop(1, "#ef4444");
 
-        const gain = 4.5;
+          canvasCtx.fillStyle = grad;
+          canvasCtx.shadowBlur = Math.min(12, amp * 14);
+          canvasCtx.shadowColor = "#f59e0b";
 
-        for (let i = 0; i < bufferLength; i++) {
-          const norm = (timeData[i] - 128) / 128.0;
-          const amplified = Math.max(-0.95, Math.min(0.95, norm * gain));
-          const y = (height / 2) + (amplified * (height * 0.44));
-
-          if (i === 0) {
-            canvasCtx.moveTo(x, y);
+          if (canvasCtx.roundRect) {
+            canvasCtx.beginPath();
+            canvasCtx.roundRect(x, y, barWidth, barHeight, 2);
+            canvasCtx.fill();
           } else {
-            canvasCtx.lineTo(x, y);
+            canvasCtx.fillRect(x, y, barWidth, barHeight);
           }
-          x += sliceWidth;
         }
 
-        canvasCtx.lineTo(width, height / 2);
-        canvasCtx.stroke();
+        if (visibleSlice.length > 0) {
+          const headX = (visibleSlice.length - 1) * slotWidth + barWidth + 3;
+          canvasCtx.beginPath();
+          canvasCtx.arc(headX, height / 2, 4, 0, Math.PI * 2);
+          canvasCtx.fillStyle = "#ef4444";
+          canvasCtx.shadowBlur = 10;
+          canvasCtx.shadowColor = "#ef4444";
+          canvasCtx.fill();
+        }
+
         canvasCtx.shadowBlur = 0;
       }
 
-      renderFrame();
+      animFrameId = requestAnimationFrame(renderRecordingFrame);
     }
 
     function stopWaveformVisualizer() {
       if (animFrameId) cancelAnimationFrame(animFrameId);
+      isWaveformRecording = false;
+
       if (audioSourceNode) {
         try { audioSourceNode.disconnect(); } catch (e) {}
         audioSourceNode = null;
@@ -2720,9 +2761,162 @@
       document.getElementById("micVolText").innerText = "(0%)";
     }
 
+    /* Extract exact trimmed waveform from audio URL */
+    async function loadTrimmedAudioWaveform(audioUrl) {
+      try {
+        if (!audioContext || audioContext.state === "closed") {
+          audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (audioContext.state === "suspended") {
+          await audioContext.resume();
+        }
+
+        const res = await fetch(audioUrl);
+        const arrayBuf = await res.arrayBuffer();
+        const audioBuf = await audioContext.decodeAudioData(arrayBuf);
+        const rawData = audioBuf.getChannelData(0);
+
+        const numBars = 110;
+        const step = Math.floor(rawData.length / numBars);
+        recordedWaveformPeaks = [];
+
+        for (let i = 0; i < numBars; i++) {
+          const start = i * step;
+          const end = Math.min(start + step, rawData.length);
+          let sum = 0;
+          for (let j = start; j < end; j++) {
+            sum += Math.abs(rawData[j]);
+          }
+          const avg = sum / (end - start);
+          const amp = Math.min(1.0, Math.max(0.08, avg * 5.2));
+          recordedWaveformPeaks.push(amp);
+        }
+
+        isReviewingDub = true;
+        renderPlaybackWaveform(0.0);
+      } catch (e) {
+        console.warn("Could not decode audio data for waveform:", e);
+        isReviewingDub = true;
+        renderPlaybackWaveform(0.0);
+      }
+    }
+
+    /* Render Static Waveform with Playhead & Played Fill */
+    function renderPlaybackWaveform(progress = 0.0) {
+      if (!isReviewingDub || recordedWaveformPeaks.length === 0) return;
+
+      updateWaveformCanvasSize();
+      const wrapper = waveformCanvas.parentElement;
+      const width = wrapper ? wrapper.clientWidth : 700;
+      const height = 90;
+
+      canvasCtx.clearRect(0, 0, width, height);
+
+      const totalBars = recordedWaveformPeaks.length;
+      const slotWidth = width / totalBars;
+      const barWidth = Math.max(2, slotWidth * 0.62);
+
+      const playheadX = Math.max(0, Math.min(width, progress * width));
+
+      for (let i = 0; i < totalBars; i++) {
+        const amp = recordedWaveformPeaks[i];
+        const x = i * slotWidth + (slotWidth - barWidth) / 2;
+        const barHeight = Math.max(5, amp * (height * 0.88));
+        const y = (height - barHeight) / 2;
+
+        const isPlayed = (x + barWidth / 2) <= playheadX;
+
+        if (isPlayed) {
+          const grad = canvasCtx.createLinearGradient(0, y, 0, y + barHeight);
+          grad.addColorStop(0, "#f59e0b");
+          grad.addColorStop(0.5, "#fcd34d");
+          grad.addColorStop(1, "#06b6d4");
+
+          canvasCtx.fillStyle = grad;
+          canvasCtx.shadowBlur = 6;
+          canvasCtx.shadowColor = "#f59e0b";
+        } else {
+          canvasCtx.fillStyle = "rgba(255, 255, 255, 0.22)";
+          canvasCtx.shadowBlur = 0;
+        }
+
+        if (canvasCtx.roundRect) {
+          canvasCtx.beginPath();
+          canvasCtx.roundRect(x, y, barWidth, barHeight, 2);
+          canvasCtx.fill();
+        } else {
+          canvasCtx.fillRect(x, y, barWidth, barHeight);
+        }
+      }
+
+      // Draw Google Pixel Scrubber / Playhead Line
+      canvasCtx.beginPath();
+      canvasCtx.moveTo(playheadX, 4);
+      canvasCtx.lineTo(playheadX, height - 4);
+      canvasCtx.strokeStyle = "#ffffff";
+      canvasCtx.lineWidth = 2.5;
+      canvasCtx.shadowBlur = 10;
+      canvasCtx.shadowColor = "#fcd34d";
+      canvasCtx.stroke();
+
+      canvasCtx.beginPath();
+      canvasCtx.arc(playheadX, 6, 3.5, 0, Math.PI * 2);
+      canvasCtx.arc(playheadX, height - 6, 3.5, 0, Math.PI * 2);
+      canvasCtx.fillStyle = "#fcd34d";
+      canvasCtx.shadowBlur = 8;
+      canvasCtx.shadowColor = "#fcd34d";
+      canvasCtx.fill();
+
+      canvasCtx.shadowBlur = 0;
+
+      const tooltip = document.getElementById("playheadTimeTooltip");
+      if (tooltip && modalDubAudio && modalDubAudio.duration) {
+        const curSec = modalDubAudio.currentTime.toFixed(1);
+        const totSec = modalDubAudio.duration.toFixed(1);
+        tooltip.innerText = `${curSec}s / ${totSec}s`;
+      }
+    }
+
+    function startPlaybackRenderLoop() {
+      if (playbackRenderLoopId) cancelAnimationFrame(playbackRenderLoopId);
+
+      function loop() {
+        if (!modalDubAudio || modalDubAudio.paused || modalDubAudio.ended) {
+          if (modalDubAudio && modalDubAudio.ended) {
+            renderPlaybackWaveform(1.0);
+          }
+          return;
+        }
+
+        const progress = modalDubAudio.duration ? (modalDubAudio.currentTime / modalDubAudio.duration) : 0;
+        renderPlaybackWaveform(progress);
+        playbackRenderLoopId = requestAnimationFrame(loop);
+      }
+
+      playbackRenderLoopId = requestAnimationFrame(loop);
+    }
+
+    waveformCanvas.addEventListener("click", (e) => {
+      if (!isReviewingDub || !modalDubAudio || !modalDubAudio.duration) return;
+      const rect = waveformCanvas.getBoundingClientRect();
+      const clickRatio = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+      modalDubAudio.currentTime = clickRatio * modalDubAudio.duration;
+      if (modalVideo && modalChunk) {
+        modalVideo.currentTime = modalChunk.start + modalDubAudio.currentTime;
+      }
+      renderPlaybackWaveform(clickRatio);
+      if (modalDubAudio.paused) {
+        previewModalDub();
+      }
+    });
+
     window.addEventListener("resize", () => {
       if (dubbingModal.classList.contains("open")) {
-        updateWaveformCanvasSize();
+        if (isReviewingDub) {
+          renderPlaybackWaveform(modalDubAudio && modalDubAudio.duration ? modalDubAudio.currentTime / modalDubAudio.duration : 0.0);
+        } else {
+          updateWaveformCanvasSize();
+        }
       }
     });
 
@@ -2834,7 +3028,9 @@
         lastUploadedDubInfo = data;
 
         modalChunk.dubbed = true;
-        modalDubAudio.src = data.audio_url + '?t=' + Date.now();
+        const freshAudioUrl = data.audio_url + '?t=' + Date.now();
+        modalDubAudio.src = freshAudioUrl;
+        await loadTrimmedAudioWaveform(freshAudioUrl);
 
         const leadCut = data.trim_info ? data.trim_info.lead_silence_stripped.toFixed(2) : '0.0';
         const trimDur = data.trim_info ? data.trim_info.trimmed_duration.toFixed(2) : '0.0';
@@ -2861,6 +3057,7 @@
 
       modalVideo.play().catch(() => {});
       modalDubAudio.play().catch(() => {});
+      startPlaybackRenderLoop();
 
       const checkEnd = setInterval(() => {
         if (modalDubAudio.ended || modalVideo.currentTime >= modalChunk.end + 2.0) {
@@ -2873,6 +3070,8 @@
 
     function redoModalDub() {
       stopModalVideo();
+      isReviewingDub = false;
+      recordedWaveformPeaks = [];
       document.getElementById('modalReviewPanel').style.display = 'none';
       document.getElementById('modalRecordControls').style.display = 'flex';
       resetRecordBtnState();
