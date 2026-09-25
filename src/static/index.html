@@ -2282,10 +2282,7 @@
                  onchange="updateChunkText(${idx}, this.value)" />
 
           <div class="chunk-card-actions">
-            <button class="btn-chunk-action" onclick="playChunkOnce(${idx})">
-              <span>🎧</span> Practice
-            </button>
-            <button class="btn-chunk-action" style="color:var(--accent-gold);font-weight:700;" onclick="openDubbingModal(${idx})">
+            <button class="btn-chunk-action" style="background:rgba(239,68,68,0.15);border-color:rgba(239,68,68,0.4);color:#fca5a5;font-weight:700;padding:6px 16px;border-radius:18px;" onclick="openDubbingModal(${idx})">
               <span>🎙️</span> Dub Line
             </button>
           </div>
@@ -2418,10 +2415,7 @@
       }, 50);
     }
 
-    function playChunkOnce(idx) {
-      selectChunk(idx);
-      previewActiveChunkOriginal();
-    }
+
 
     /* ==========================================================================
        DEDICATED DUBBING BOOTH MODAL & WAVEFORM ENGINE
