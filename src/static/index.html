@@ -407,6 +407,158 @@
       cursor: pointer;
     }
 
+    /* ==========================================================================
+       CAST & PLAYERS / CHARACTER MANAGEMENT BAR
+       ========================================================================== */
+    .players-section {
+      background: rgba(14, 20, 32, 0.95);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 16px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .players-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .players-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .players-header-actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .btn-header-action {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border-color);
+      color: #cbd5e1;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.2s;
+    }
+
+    .btn-header-action:hover {
+      background: rgba(245, 158, 11, 0.2);
+      border-color: var(--accent-gold);
+      color: #fff;
+    }
+
+    .players-chips-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .player-chip {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-color);
+      border-radius: 24px;
+      padding: 6px 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #fff;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .player-chip:hover {
+      border-color: rgba(255, 255, 255, 0.3);
+      transform: translateY(-1px);
+    }
+
+    .player-chip.filter-active {
+      box-shadow: 0 0 12px rgba(245, 158, 11, 0.35);
+      border-color: var(--accent-gold);
+    }
+
+    .player-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    .player-chip-count {
+      font-size: 11px;
+      color: var(--text-dim);
+    }
+
+    .btn-edit-player {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 12px;
+      padding: 0;
+      display: flex;
+      align-items: center;
+    }
+
+    .btn-edit-player:hover {
+      color: var(--accent-gold);
+    }
+
+    /* Role Filter Tabs */
+    .role-filter-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 4px;
+      padding-top: 10px;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      flex-wrap: wrap;
+    }
+
+    .role-filter-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-dim);
+    }
+
+    .filter-pill {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 4px 10px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .filter-pill.active {
+      background: rgba(245, 158, 11, 0.2);
+      border-color: var(--accent-gold);
+      color: #fcd34d;
+    }
+
     /* Chunk Studio & Rehearsal Flow */
     .chunk-studio {
       display: flex;
@@ -432,6 +584,12 @@
       align-items: center;
     }
 
+    .active-badge-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
     .active-badge {
       font-size: 12px;
       font-weight: 700;
@@ -442,6 +600,19 @@
       color: #fcd34d;
       padding: 4px 10px;
       border-radius: 20px;
+    }
+
+    .character-badge {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 14px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      background: rgba(0, 0, 0, 0.4);
     }
 
     .active-time {
@@ -674,6 +845,25 @@
       font-size: 13px;
     }
 
+    .speaker-selector-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 2px 8px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #fff;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.2s;
+    }
+
+    .speaker-selector-btn:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+
     .chunk-status-pill {
       font-size: 11px;
       padding: 2px 8px;
@@ -879,6 +1069,20 @@
       color: #fcd34d;
     }
 
+    .modal-speaker-pill {
+      font-size: 12px;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 20px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #fff;
+    }
+
     .modal-time-range {
       font-size: 13px;
       font-weight: 600;
@@ -913,7 +1117,6 @@
       gap: 20px;
     }
 
-    /* Constrained Trimmed Video Container */
     .modal-video-container {
       position: relative;
       background: #000;
@@ -966,7 +1169,6 @@
       color: #fcd34d;
     }
 
-    /* Dialogue Line Prompt Box */
     .modal-dialogue-card {
       background: rgba(14, 20, 32, 0.85);
       border: 1px solid var(--border-color);
@@ -983,6 +1185,9 @@
       text-transform: uppercase;
       letter-spacing: 0.5px;
       color: var(--text-dim);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
 
     .modal-dialogue-text {
@@ -1002,7 +1207,6 @@
       width: 100%;
     }
 
-    /* Voice Oscilloscope / Waveform Section */
     .waveform-card {
       background: rgba(10, 14, 24, 0.95);
       border: 1px solid rgba(245, 158, 11, 0.25);
@@ -1085,7 +1289,6 @@
       gap: 6px;
     }
 
-    /* Modal Recording Controls */
     .modal-record-controls {
       display: flex;
       flex-direction: column;
@@ -1127,7 +1330,6 @@
       display: none;
     }
 
-    /* Modal Review Stage */
     .modal-review-panel {
       background: rgba(16, 185, 129, 0.08);
       border: 1px solid rgba(16, 185, 129, 0.35);
@@ -1367,11 +1569,52 @@
         </div>
       </div>
 
+      <!-- ==========================================================================
+           CAST & PLAYERS / CHARACTER MANAGEMENT BAR
+           ========================================================================== -->
+      <div class="players-section" id="playersSection" style="opacity:0.4;pointer-events:none;">
+        <div class="players-header">
+          <div class="players-title">
+            <span>👥 Cast & Players</span>
+            <span style="font-size:12px;color:var(--text-dim);font-weight:400;" id="playerCountLabel">(2 voices)</span>
+          </div>
+          <div class="players-header-actions">
+            <button class="btn-header-action" onclick="reClusterSpeakers()">
+              <span>⚡</span> Re-detect Voices (AI)
+            </button>
+            <button class="btn-header-action" style="color:var(--accent-gold);border-color:rgba(245,158,11,0.3);" onclick="promptAddNewPlayer()">
+              <span>+</span> Add Player / Voice
+            </button>
+          </div>
+        </div>
+
+        <!-- Chips of all current characters -->
+        <div class="players-chips-container" id="playersChips">
+          <!-- Rendered dynamically -->
+        </div>
+
+        <!-- Role Filter Tabs: Play as All or as a specific character -->
+        <div class="role-filter-row">
+          <span class="role-filter-label">🎭 Playing As:</span>
+          <button class="filter-pill active" id="filterAll" onclick="setRoleFilter(null)">
+            All Characters
+          </button>
+          <div id="roleFilterPills" style="display:inline-flex;gap:6px;flex-wrap:wrap;"></div>
+        </div>
+      </div>
+
       <!-- Dialogue Chunk Studio & Rehearsal Flow -->
       <div class="chunk-studio" id="chunkStudio" style="opacity:0.4;pointer-events:none;">
         <div class="active-chunk-box" id="activeChunkBox">
           <div class="active-chunk-header">
-            <span class="active-badge" id="activeBadge">Line #1 of 3</span>
+            <div class="active-badge-group">
+              <span class="active-badge" id="activeBadge">Line #1 of 3</span>
+              <span class="character-badge" id="activeCharacterBadge" onclick="cycleActiveChunkCharacter()">
+                <span class="player-dot" id="activeCharDot" style="background:#3b82f6;"></span>
+                <span id="activeCharName">Character 1</span>
+                <small style="opacity:0.6;">▾</small>
+              </span>
+            </div>
             <span class="active-time" id="activeTime">00:00 - 00:03</span>
           </div>
 
@@ -1444,6 +1687,11 @@
       <div class="modal-header">
         <div class="modal-title-group">
           <span class="modal-badge" id="modalBadge">Line #1</span>
+          <span class="modal-speaker-pill" id="modalSpeakerPill" onclick="cycleModalChunkCharacter()" title="Click to re-assign speaker">
+            <span class="player-dot" id="modalCharDot" style="background:#3b82f6;"></span>
+            <span id="modalCharName">Character 1</span>
+            <small style="opacity:0.6;">▾</small>
+          </span>
           <span class="modal-time-range" id="modalTimeRange">00:00 - 00:03</span>
         </div>
         <button class="modal-close-btn" onclick="closeDubbingModal()" title="Close Booth (Esc)">✕</button>
@@ -1472,7 +1720,10 @@
 
         <!-- Dialogue Script Teleprompter Card -->
         <div class="modal-dialogue-card">
-          <div class="modal-dialogue-label">💬 Dialogue Line to Deliver</div>
+          <div class="modal-dialogue-label">
+            <span>💬 Dialogue Line to Deliver</span>
+            <span id="modalCharacterDeliverLabel" style="font-weight:700;color:var(--accent-gold);"></span>
+          </div>
           <div class="modal-dialogue-text" id="modalPromptText">"Loading line..."</div>
           <input type="text" class="modal-dialogue-input" id="modalPromptInput" 
                  placeholder="Edit script / subtitle text..." 
@@ -1545,7 +1796,9 @@
     let currentClip = null;
     let stemMode = 'full';
     let currentSegments = [];
+    let currentCharacters = [];
     let activeChunkIndex = 0;
+    let selectedRoleFilter = null; // null = all, or char_id
 
     // Media Recorder & Web Audio state
     let isRecording = false;
@@ -1570,6 +1823,7 @@
     const userDubAudio = document.getElementById('userDubAudio');
     const emptyState = document.getElementById('emptyState');
     const mixerBar = document.getElementById('mixerBar');
+    const playersSection = document.getElementById('playersSection');
     const chunkStudio = document.getElementById('chunkStudio');
     const teleprompter = document.getElementById('teleprompter');
 
@@ -1610,7 +1864,7 @@
 
       processBtn.disabled = true;
       statusBox.style.display = 'block';
-      statusText.innerText = 'Downloading video segment and running AI stem separation... (takes ~15-25s)';
+      statusText.innerText = 'Downloading video segment and running AI stem separation & speaker clustering... (takes ~15-25s)';
 
       try {
         const response = await fetch('/api/process', {
@@ -1632,7 +1886,7 @@
         }
 
         const data = await response.json();
-        statusText.innerText = '✨ Separation complete! Loading clip & dialogue chunks...';
+        statusText.innerText = '✨ Separation & Diarization complete! Loading clip & voices...';
         await loadLibrary();
         loadClip(data.clip_id);
       } catch (err) {
@@ -1686,6 +1940,8 @@
         mainVideo.style.display = 'block';
         mixerBar.style.opacity = '1';
         mixerBar.style.pointerEvents = 'all';
+        playersSection.style.opacity = '1';
+        playersSection.style.pointerEvents = 'all';
         chunkStudio.style.opacity = '1';
         chunkStudio.style.pointerEvents = 'all';
 
@@ -1695,7 +1951,8 @@
         userDubAudio.src = '';
 
         setStemMode('full');
-        await fetchSegments(clipId);
+        selectedRoleFilter = null;
+        await fetchSegmentsAndCharacters(clipId);
       } catch (e) {
         console.error('Failed to load clip:', e);
       }
@@ -1757,23 +2014,204 @@
     }
 
     /* ==========================================================================
-       DIALOGUE SEGMENTS & MAIN VIEW
+       CHARACTERS, PLAYERS & VOICE CLUSTERING
        ========================================================================== */
-    async function fetchSegments(clipId) {
+    async function fetchSegmentsAndCharacters(clipId) {
       try {
         const res = await fetch(`/api/clips/${clipId}/segments`);
         if (!res.ok) return;
         const data = await res.json();
         currentSegments = data.segments || [];
+        currentCharacters = data.characters || [];
         activeChunkIndex = 0;
+
+        renderPlayersBar();
         renderSegmentsList();
         updateActiveChunkView();
         updateAssemblyStatus();
       } catch (e) {
-        console.error('Failed to fetch segments:', e);
+        console.error('Failed to fetch segments/characters:', e);
       }
     }
 
+    function renderPlayersBar() {
+      const container = document.getElementById('playersChips');
+      const filterPills = document.getElementById('roleFilterPills');
+      container.innerHTML = '';
+      filterPills.innerHTML = '';
+
+      document.getElementById('playerCountLabel').innerText = `(${currentCharacters.length} voices)`;
+
+      currentCharacters.forEach(char => {
+        // Count how many lines this character has
+        const count = currentSegments.filter(s => (s.character_id === char.id || s.character_name === char.name)).length;
+
+        // Player chip in Cast section
+        const chip = document.createElement('div');
+        chip.className = `player-chip ${selectedRoleFilter === char.id ? 'filter-active' : ''}`;
+        chip.innerHTML = `
+          <span class="player-dot" style="background:${char.color};"></span>
+          <span>${char.name}</span>
+          <span class="player-chip-count">(${count} lines)</span>
+          <button class="btn-edit-player" title="Rename Character" onclick="promptRenamePlayer('${char.id}', '${char.name}')">✏️</button>
+        `;
+        container.appendChild(chip);
+
+        // Role filter pill
+        const filterBtn = document.createElement('button');
+        filterBtn.className = `filter-pill ${selectedRoleFilter === char.id ? 'active' : ''}`;
+        filterBtn.innerHTML = `<span class="player-dot" style="background:${char.color};display:inline-block;width:8px;height:8px;margin-right:4px;"></span> ${char.name} (${count})`;
+        filterBtn.onclick = () => setRoleFilter(char.id);
+        filterPills.appendChild(filterBtn);
+      });
+
+      document.getElementById('filterAll').classList.toggle('active', selectedRoleFilter === null);
+    }
+
+    function setRoleFilter(charId) {
+      selectedRoleFilter = charId;
+      renderPlayersBar();
+      renderSegmentsList();
+      
+      // Auto select first segment matching filter
+      if (charId) {
+        const firstMatch = currentSegments.findIndex(s => s.character_id === charId);
+        if (firstMatch !== -1) {
+          selectChunk(firstMatch);
+        }
+      }
+    }
+
+    async function promptAddNewPlayer() {
+      if (!currentClip) return;
+      const name = prompt("Enter new Player / Character name (e.g. Pushpa, Brahmanandam, Dash):");
+      if (!name || !name.trim()) return;
+
+      try {
+        const res = await fetch(`/api/clips/${currentClip.id}/characters`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'add', name: name.trim() })
+        });
+        if (!res.ok) throw new Error('Failed to add character');
+        const data = await res.json();
+        currentCharacters = data.characters;
+        renderPlayersBar();
+        renderSegmentsList();
+      } catch (err) {
+        alert('Error adding player: ' + err.message);
+      }
+    }
+
+    async function promptRenamePlayer(charId, currentName) {
+      if (!currentClip) return;
+      const newName = prompt(`Rename character "${currentName}":`, currentName);
+      if (!newName || !newName.trim() || newName.trim() === currentName) return;
+
+      try {
+        const res = await fetch(`/api/clips/${currentClip.id}/characters`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'update', id: charId, name: newName.trim() })
+        });
+        if (!res.ok) throw new Error('Failed to rename character');
+        const data = await res.json();
+        currentCharacters = data.characters;
+
+        // Update local segment names
+        currentSegments.forEach(s => {
+          if (s.character_id === charId) s.character_name = newName.trim();
+        });
+
+        renderPlayersBar();
+        renderSegmentsList();
+        updateActiveChunkView();
+      } catch (err) {
+        alert('Error updating player: ' + err.message);
+      }
+    }
+
+    async function reClusterSpeakers() {
+      if (!currentClip) return;
+      const countInput = prompt("How many distinct speakers / characters are in this scene? (Enter 2, 3, 4 or leave empty for auto):");
+      const n_speakers = countInput && !isNaN(parseInt(countInput, 10)) ? parseInt(countInput, 10) : null;
+
+      try {
+        const res = await fetch(`/api/clips/${currentClip.id}/diarize`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ n_speakers: n_speakers })
+        });
+        if (!res.ok) throw new Error('Diarization failed');
+        const data = await res.json();
+        currentSegments = data.segments;
+        currentCharacters = data.characters;
+
+        renderPlayersBar();
+        renderSegmentsList();
+        updateActiveChunkView();
+        alert(`✨ Successfully clustered dialogue into ${data.clusters_count} characters!`);
+      } catch (err) {
+        alert('Error clustering speakers: ' + err.message);
+      }
+    }
+
+    function getCharacterObj(charId, charName) {
+      if (!currentCharacters || currentCharacters.length === 0) {
+        return { id: 'char_1', name: charName || 'Character 1', color: '#3b82f6' };
+      }
+      return currentCharacters.find(c => c.id === charId || c.name === charName) || currentCharacters[0];
+    }
+
+    function setChunkCharacter(chunkIdx, charId) {
+      const charObj = currentCharacters.find(c => c.id === charId);
+      if (!charObj || !currentSegments[chunkIdx]) return;
+
+      currentSegments[chunkIdx].character_id = charObj.id;
+      currentSegments[chunkIdx].character_name = charObj.name;
+
+      saveSegmentsToServer();
+      renderPlayersBar();
+      renderSegmentsList();
+      if (chunkIdx === activeChunkIndex) updateActiveChunkView();
+    }
+
+    function cycleActiveChunkCharacter() {
+      if (!currentSegments[activeChunkIndex] || currentCharacters.length <= 1) return;
+      const currentId = currentSegments[activeChunkIndex].character_id;
+      const currIdx = currentCharacters.findIndex(c => c.id === currentId);
+      const nextIdx = (currIdx + 1) % currentCharacters.length;
+      setChunkCharacter(activeChunkIndex, currentCharacters[nextIdx].id);
+    }
+
+    function cycleModalChunkCharacter() {
+      if (!modalChunk || currentCharacters.length <= 1) return;
+      const currentId = modalChunk.character_id;
+      const currIdx = currentCharacters.findIndex(c => c.id === currentId);
+      const nextIdx = (currIdx + 1) % currentCharacters.length;
+      const nextChar = currentCharacters[nextIdx];
+
+      modalChunk.character_id = nextChar.id;
+      modalChunk.character_name = nextChar.name;
+      currentSegments[activeChunkIndex].character_id = nextChar.id;
+      currentSegments[activeChunkIndex].character_name = nextChar.name;
+
+      updateModalCharacterUI(nextChar);
+      saveSegmentsToServer();
+      renderPlayersBar();
+      renderSegmentsList();
+      updateActiveChunkView();
+    }
+
+    function updateModalCharacterUI(charObj) {
+      document.getElementById('modalCharDot').style.background = charObj.color;
+      document.getElementById('modalCharName').innerText = charObj.name;
+      document.getElementById('modalCharacterDeliverLabel').innerText = `Role: ${charObj.name}`;
+    }
+
+    /* ==========================================================================
+       DIALOGUE SEGMENTS & MAIN VIEW
+       ========================================================================== */
     function renderSegmentsList() {
       const container = document.getElementById('chunksList');
       document.getElementById('chunksCount').innerText = currentSegments.length;
@@ -1785,11 +2223,17 @@
       }
 
       currentSegments.forEach((seg, idx) => {
+        // Filter by role if set
+        if (selectedRoleFilter && seg.character_id !== selectedRoleFilter) {
+          return;
+        }
+
+        const charObj = getCharacterObj(seg.character_id, seg.character_name);
         const isSelected = idx === activeChunkIndex;
         const card = document.createElement('div');
         card.className = `chunk-card ${isSelected ? 'active' : ''} ${seg.dubbed ? 'dubbed' : ''}`;
         card.onclick = (e) => {
-          if (e.target.tagName !== 'BUTTON' && e.target.tagName !== 'INPUT') {
+          if (e.target.tagName !== 'BUTTON' && e.target.tagName !== 'INPUT' && e.target.tagName !== 'SELECT') {
             selectChunk(idx);
           }
         };
@@ -1797,11 +2241,21 @@
         const statusClass = seg.dubbed ? 'done' : 'pending';
         const statusText = seg.dubbed ? 'Dubbed ✅' : 'Pending ⏳';
 
+        // Build character dropdown options
+        let charOptions = '';
+        currentCharacters.forEach(c => {
+          const sel = (c.id === charObj.id) ? 'selected' : '';
+          charOptions += `<option value="${c.id}" ${sel}>${c.name}</option>`;
+        });
+
         card.innerHTML = `
           <div class="chunk-card-top">
             <div class="chunk-label">
               <span>#${idx + 1}</span>
               <span class="chunk-status-pill ${statusClass}">${statusText}</span>
+              <select class="speaker-selector-btn" style="border-color:${charObj.color};" onchange="setChunkCharacter(${idx}, this.value)">
+                ${charOptions}
+              </select>
             </div>
             <div style="font-size:12px;color:var(--accent-cyan);font-weight:600;">
               ${formatSec(seg.start)} - ${formatSec(seg.end)} (${(seg.end - seg.start).toFixed(1)}s)
@@ -1855,13 +2309,18 @@
       }
 
       const chunk = currentSegments[activeChunkIndex];
+      const charObj = getCharacterObj(chunk.character_id, chunk.character_name);
+
       document.getElementById('activeBadge').innerText = `Line #${activeChunkIndex + 1} of ${currentSegments.length}`;
       document.getElementById('activeTime').innerText = `${formatSec(chunk.start)} - ${formatSec(chunk.end)} (${(chunk.end - chunk.start).toFixed(1)}s)`;
       
+      document.getElementById('activeCharDot').style.background = charObj.color;
+      document.getElementById('activeCharName').innerText = charObj.name;
+
       const promptText = chunk.text ? `"${chunk.text}"` : `Line #${activeChunkIndex + 1} (No script text entered)`;
       document.getElementById('activePromptDisplay').innerText = promptText;
 
-      teleprompter.innerText = chunk.text || `Line #${activeChunkIndex + 1}`;
+      teleprompter.innerText = `${charObj.name}: ${chunk.text || 'Dialogue Line'}`;
       teleprompter.classList.add('active');
     }
 
@@ -1894,15 +2353,20 @@
       const last = currentSegments[currentSegments.length - 1];
       const start = last ? Math.round((last.end + 0.5) * 10) / 10 : 0.0;
       const end = start + 2.0;
+      const defaultChar = currentCharacters[0] || { id: 'char_1', name: 'Character 1' };
+
       currentSegments.push({
         id: `chunk_${currentSegments.length}`,
         start: start,
         end: end,
         duration: 2.0,
         text: '',
-        dubbed: false
+        dubbed: false,
+        character_id: defaultChar.id,
+        character_name: defaultChar.name
       });
       activeChunkIndex = currentSegments.length - 1;
+      renderPlayersBar();
       renderSegmentsList();
       updateActiveChunkView();
       saveSegmentsToServer();
@@ -1967,13 +2431,16 @@
       activeChunkIndex = index;
       modalChunk = currentSegments[index];
 
-      // Pause main player
       if (mainVideo && !mainVideo.paused) mainVideo.pause();
+
+      const charObj = getCharacterObj(modalChunk.character_id, modalChunk.character_name);
 
       // Setup Modal Info
       document.getElementById('modalBadge').innerText = `Line #${index + 1} of ${currentSegments.length}`;
       document.getElementById('modalTimeRange').innerText = `${formatSec(modalChunk.start)} - ${formatSec(modalChunk.end)} (${(modalChunk.end - modalChunk.start).toFixed(1)}s window)`;
       
+      updateModalCharacterUI(charObj);
+
       const prompt = modalChunk.text || `Line #${index + 1} (No script text entered)`;
       document.getElementById('modalPromptText').innerText = `"${prompt}"`;
       document.getElementById('modalPromptInput').value = modalChunk.text || '';
@@ -1987,14 +2454,15 @@
       document.getElementById('modalRecordControls').style.display = 'flex';
       resetRecordBtnState();
 
-      // Show Next button if not last chunk
+      // Show Next button if more matching lines exist
+      const nextIndex = getNextFilteredChunkIndex(index);
       const nextBtn = document.getElementById('btnNextLineModal');
-      nextBtn.style.display = (index < currentSegments.length - 1) ? 'flex' : 'none';
+      nextBtn.style.display = (nextIndex !== -1) ? 'flex' : 'none';
 
       // Load trimmed video in modal
       setModalVideoMode('vocals');
 
-      // Setup & start resting waveform canvas
+      // Setup waveform canvas
       initWaveformCanvas();
       drawRestingWaveform();
 
@@ -2002,17 +2470,26 @@
       dubbingModal.classList.add('open');
     }
 
+    function getNextFilteredChunkIndex(fromIdx) {
+      for (let i = fromIdx + 1; i < currentSegments.length; i++) {
+        if (!selectedRoleFilter || currentSegments[i].character_id === selectedRoleFilter) {
+          return i;
+        }
+      }
+      return -1;
+    }
+
     function closeDubbingModal() {
       stopModalVideo();
       if (isRecording) stopModalRecording();
       stopWaveformVisualizer();
       dubbingModal.classList.remove('open');
+      renderPlayersBar();
       renderSegmentsList();
       updateActiveChunkView();
       updateAssemblyStatus();
     }
 
-    // Keyboard support: Esc closes modal
     window.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && dubbingModal.classList.contains('open')) {
         closeDubbingModal();
@@ -2101,7 +2578,6 @@
 
       canvasCtx.clearRect(0, 0, width, height);
 
-      // Subtle ambient neon resting pulse
       const t = Date.now() * 0.003;
       canvasCtx.beginPath();
       canvasCtx.moveTo(0, height / 2);
@@ -2163,7 +2639,6 @@
 
         canvasCtx.clearRect(0, 0, width, height);
 
-        // Compute peak / RMS volume for badge
         let sumSquares = 0;
         for (let i = 0; i < bufferLength; i++) {
           const norm = (dataArray[i] - 128) / 128;
@@ -2173,7 +2648,6 @@
         const volPct = Math.min(100, Math.round(rms * 280));
         document.getElementById('micVolText').innerText = `(${volPct}%)`;
 
-        // Draw glowing oscilloscope wave
         canvasCtx.beginPath();
         const sliceWidth = width / bufferLength;
         let x = 0;
@@ -2217,7 +2691,7 @@
       document.getElementById('micVolText').innerText = '(0%)';
     }
 
-    /* Modal Recording Logic (Independent Timing + Real-Time Feedback) */
+    /* Modal Recording Logic */
     async function toggleModalRecording() {
       if (isRecording) {
         stopModalRecording();
@@ -2243,7 +2717,6 @@
 
         mediaRecorder.start();
 
-        // UI state update
         const recBtn = document.getElementById('btnRecordMain');
         recBtn.classList.add('recording');
         document.getElementById('recordIcon').innerText = '⏹️';
@@ -2257,16 +2730,13 @@
           timerText.innerText = `⏱️ Recording: ${elapsed.toFixed(1)}s (Take your time)`;
         }, 100);
 
-        // Start waveform visualizer
         await startWaveformVisualizer(micStream);
 
-        // Play instrumental video starting at chunk start so user can speak along
         const targetSrc = `/media/${currentClip.id}/video_instrumental.mp4`;
         if (!modalVideo.src.endsWith(targetSrc)) modalVideo.src = targetSrc;
         modalVideo.currentTime = modalChunk.start;
         modalVideo.play().catch(() => {});
 
-        // Independent timing: video can pause after chunk.end while user finishes naturally
         const autoVideoStop = setInterval(() => {
           if (!isRecording) {
             clearInterval(autoVideoStop);
@@ -2314,7 +2784,6 @@
       const blob = new Blob(recordedAudioChunks, { type: 'audio/webm' });
       document.getElementById('recordBtnLabel').innerText = 'Trimming Silence & Aligning...';
 
-      // Send to backend for automatic silence stripping & alignment
       const formData = new FormData();
       formData.append('chunk_id', modalChunk.id);
       formData.append('file', blob, `${modalChunk.id}.webm`);
@@ -2330,11 +2799,8 @@
         lastUploadedDubInfo = data;
 
         modalChunk.dubbed = true;
-
-        // Setup audio element with trimmed audio
         modalDubAudio.src = data.audio_url + '?t=' + Date.now();
 
-        // Update Review Stage
         const leadCut = data.trim_info ? data.trim_info.lead_silence_stripped.toFixed(2) : '0.0';
         const trimDur = data.trim_info ? data.trim_info.trimmed_duration.toFixed(2) : '0.0';
         document.getElementById('silenceTrimmedBadge').innerText = `✨ Auto-trimmed ${leadCut}s dead air (Speech: ${trimDur}s)`;
@@ -2342,7 +2808,6 @@
         document.getElementById('modalRecordControls').style.display = 'none';
         document.getElementById('modalReviewPanel').style.display = 'flex';
 
-        // Auto preview immediately so user gets instant gratification!
         previewModalDub();
       } catch (err) {
         alert('Error saving dub: ' + err.message);
@@ -2353,7 +2818,6 @@
     function previewModalDub() {
       if (!modalChunk || !modalDubAudio.src) return;
 
-      // Play video with instrumental BGM, aligned at chunk.start with trimmed user dub
       const targetSrc = `/media/${currentClip.id}/video_instrumental.mp4`;
       if (!modalVideo.src.endsWith(targetSrc)) modalVideo.src = targetSrc;
       
@@ -2387,11 +2851,12 @@
 
     function saveAndNextModal() {
       stopModalVideo();
-      if (activeChunkIndex < currentSegments.length - 1) {
-        openDubbingModal(activeChunkIndex + 1);
+      const nextIdx = getNextFilteredChunkIndex(activeChunkIndex);
+      if (nextIdx !== -1) {
+        openDubbingModal(nextIdx);
       } else {
         closeDubbingModal();
-        alert('🎉 All dialogue lines dubbed! Click "Assemble Full Movie Dub" to watch the full scene!');
+        alert('🎉 All dialogue lines in this role are dubbed! Click "Assemble Full Movie Dub" to watch the full scene!');
       }
     }
 
@@ -2432,7 +2897,6 @@
         const downloadLink = document.getElementById('downloadDubLink');
         downloadLink.href = data.video_url;
 
-        // Play final dubbed movie
         mainVideo.src = data.video_url + '?t=' + Date.now();
         mainVideo.currentTime = 0;
         mainVideo.muted = false;

@@ -11,6 +11,7 @@ from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
 from src.assembler import assemble_full_dub, process_and_trim_chunk
+from src.diarizer import add_new_character, cluster_speakers_for_clip, get_characters, update_character
 from src.downloader import download_youtube_clip
 from src.segmenter import get_or_create_segments, save_segments
 from src.separator import separate_audio_stems
@@ -114,13 +115,14 @@ def get_clip(clip_id: str):
 
 @app.get("/api/clips/{clip_id}/segments")
 def get_segments(clip_id: str):
-    """Retrieves or auto-detects dialogue segments for a clip."""
+    """Retrieves or auto-detects dialogue segments with character voice assignments."""
     clip_folder = DATA_DIR / clip_id
     if not clip_folder.exists():
         raise HTTPException(status_code=404, detail="Clip not found")
     try:
         segments = get_or_create_segments(clip_folder)
-        return {"clip_id": clip_id, "segments": segments}
+        characters = get_characters(clip_folder)
+        return {"clip_id": clip_id, "segments": segments, "characters": characters}
     except Exception as e:
         logger.exception("Failed to get segments")
         raise HTTPException(status_code=500, detail=str(e))
@@ -132,12 +134,67 @@ class SaveSegmentsRequest(BaseModel):
 
 @app.post("/api/clips/{clip_id}/segments")
 def update_segments(clip_id: str, req: SaveSegmentsRequest):
-    """Saves user-trimmed or edited segments."""
+    """Saves user-trimmed, edited, or re-assigned character segments."""
     clip_folder = DATA_DIR / clip_id
     if not clip_folder.exists():
         raise HTTPException(status_code=404, detail="Clip not found")
     save_segments(clip_folder, req.segments)
     return {"status": "success", "segments": req.segments}
+
+
+@app.get("/api/clips/{clip_id}/characters")
+def list_characters(clip_id: str):
+    """Returns the list of character roles / players for a clip."""
+    clip_folder = DATA_DIR / clip_id
+    if not clip_folder.exists():
+        raise HTTPException(status_code=404, detail="Clip not found")
+    characters = get_characters(clip_folder)
+    return {"clip_id": clip_id, "characters": characters}
+
+
+class CharacterActionRequest(BaseModel):
+    action: str  # "add" or "update"
+    id: Optional[str] = None
+    name: str
+    color: Optional[str] = None
+
+
+@app.post("/api/clips/{clip_id}/characters")
+def manage_character(clip_id: str, req: CharacterActionRequest):
+    """Adds a new player or updates/renames an existing character."""
+    clip_folder = DATA_DIR / clip_id
+    if not clip_folder.exists():
+        raise HTTPException(status_code=404, detail="Clip not found")
+
+    if req.action == "add":
+        new_char = add_new_character(clip_folder, name=req.name, color=req.color)
+        chars = get_characters(clip_folder)
+        return {"status": "success", "characters": chars, "new_character": new_char}
+    elif req.action == "update":
+        if not req.id:
+            raise HTTPException(status_code=400, detail="Character id required for update")
+        chars = update_character(clip_folder, char_id=req.id, name=req.name, color=req.color)
+        return {"status": "success", "characters": chars}
+    else:
+        raise HTTPException(status_code=400, detail=f"Unknown action: {req.action}")
+
+
+class DiarizeRequest(BaseModel):
+    n_speakers: Optional[int] = None
+
+
+@app.post("/api/clips/{clip_id}/diarize")
+def re_cluster_speakers(clip_id: str, req: DiarizeRequest):
+    """Re-runs local acoustic voice clustering with optional number of speakers."""
+    clip_folder = DATA_DIR / clip_id
+    if not clip_folder.exists():
+        raise HTTPException(status_code=404, detail="Clip not found")
+    try:
+        res = cluster_speakers_for_clip(clip_folder, n_speakers=req.n_speakers)
+        return res
+    except Exception as e:
+        logger.exception("Failed to cluster speakers")
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 @app.post("/api/clips/{clip_id}/dub-chunk")

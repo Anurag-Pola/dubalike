@@ -17,7 +17,6 @@ def detect_speech_segments(
 ) -> List[Dict[str, Any]]:
     """
     Detects continuous speech / dialogue chunks from vocals.wav using RMS energy envelope.
-    Returns list of chunk dicts: [{'id': 'chunk_0', 'start': 1.2, 'end': 3.5, 'duration': 2.3, 'text': '', 'dubbed': False}]
     """
     vocals_path = Path(vocals_path)
     if not vocals_path.exists():
@@ -31,7 +30,6 @@ def detect_speech_segments(
     if total_duration <= 0.2:
         return []
 
-    # Compute RMS energy envelope (25ms window, 10ms hop)
     frame_len = int(sr * 0.025)
     hop_len = int(sr * 0.010)
     num_frames = (len(audio) - frame_len) // hop_len
@@ -42,12 +40,10 @@ def detect_speech_segments(
     frames = np.lib.stride_tricks.sliding_window_view(audio[:num_frames * hop_len + frame_len], frame_len)[::hop_len]
     rms = np.sqrt(np.mean(frames**2, axis=1))
 
-    # Adaptive threshold: 10% of 95th percentile speech energy, capped with floor
     percentile_95 = float(np.percentile(rms, 95))
     thresh = max(0.012, percentile_95 * 0.12)
     is_speech = rms > thresh
 
-    # Group contiguous speech frames
     raw_segments = []
     in_speech = False
     start_frame = 0
@@ -67,11 +63,9 @@ def detect_speech_segments(
         if duration >= min_speech_sec:
             raw_segments.append([start_frame * hop_len / sr, len(is_speech) * hop_len / sr])
 
-    # If no speech was detected by threshold, treat the whole clip as one chunk
     if not raw_segments:
         return [{"id": "chunk_0", "start": 0.0, "end": round(total_duration, 2), "duration": round(total_duration, 2), "text": "", "dubbed": False}]
 
-    # Merge segments that are closer than min_silence_sec
     merged = []
     for s_start, s_end in raw_segments:
         if not merged:
@@ -83,7 +77,6 @@ def detect_speech_segments(
             else:
                 merged.append([s_start, s_end])
 
-    # Format chunks with padding
     chunks = []
     for idx, (s, e) in enumerate(merged):
         padded_start = max(0.0, s - padding_sec)
@@ -102,7 +95,7 @@ def detect_speech_segments(
 
 
 def get_or_create_segments(clip_dir: Path) -> List[Dict[str, Any]]:
-    """Retrieves existing segments.json or auto-generates them from vocals.wav."""
+    """Retrieves existing segments.json or auto-generates them and performs speaker clustering."""
     clip_dir = Path(clip_dir)
     segments_file = clip_dir / "segments.json"
     vocals_file = clip_dir / "vocals.wav"
@@ -110,17 +103,24 @@ def get_or_create_segments(clip_dir: Path) -> List[Dict[str, Any]]:
     if segments_file.exists():
         try:
             with open(segments_file, "r", encoding="utf-8") as f:
-                return json.load(f)
+                segments = json.load(f)
+                # Check if segments have character_id assigned, if not, cluster
+                if segments and ("character_id" not in segments[0]):
+                    from src.diarizer import cluster_speakers_for_clip
+                    try:
+                        res = cluster_speakers_for_clip(clip_dir)
+                        return res.get("segments", segments)
+                    except Exception as e:
+                        logger.warning(f"Failed to cluster speakers for existing segments: {e}")
+                return segments
         except Exception as e:
             logger.warning(f"Failed to read {segments_file}: {e}")
 
     if not vocals_file.exists():
         return []
 
-    # Auto-detect
     chunks = detect_speech_segments(vocals_file)
 
-    # Attach script prompt from info.json to chunk_0 if available
     info_file = clip_dir / "info.json"
     if info_file.exists():
         try:
@@ -132,7 +132,15 @@ def get_or_create_segments(clip_dir: Path) -> List[Dict[str, Any]]:
             pass
 
     save_segments(clip_dir, chunks)
-    return chunks
+
+    # Perform speaker clustering
+    from src.diarizer import cluster_speakers_for_clip
+    try:
+        clustered = cluster_speakers_for_clip(clip_dir)
+        return clustered.get("segments", chunks)
+    except Exception as e:
+        logger.warning(f"Could not cluster speakers during initial creation: {e}")
+        return chunks
 
 
 def save_segments(clip_dir: Path, segments: List[Dict[str, Any]]) -> None:
